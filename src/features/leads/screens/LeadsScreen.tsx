@@ -7,7 +7,7 @@ import { useClinicStore } from '@features/clinics/stores/clinicStore';
 import type { Lead } from '@features/leads/api/leads.api';
 
 function LeadsScreen() {
-  const { selectedClinic } = useClinicStore();
+  const { activeClinic } = useClinicStore();
 
   const {
     data: leads,
@@ -16,9 +16,9 @@ function LeadsScreen() {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ['leads', selectedClinic?.id],
-    queryFn: () => fetchLeads(selectedClinic!.id),
-    enabled: !!selectedClinic?.id,
+    queryKey: ['leads', activeClinic?.id],
+    queryFn: () => fetchLeads(activeClinic!.id),
+    enabled: !!activeClinic?.id,
   });
 
   if (isLoading) {

@@ -1,15 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { LeadsScreen } from '@features/leads/LeadsScreen';
-import { ClinicsScreen } from '@features/clinics/ClinicsScreen';
+import { LeadsScreen } from '@features/leads/screens/LeadsScreen';
+import { ClinicsScreen } from '@features/clinics/screens/ClinicsScreen';
 import { ProfileScreen } from '@features/profile/ProfileScreen';
-
-export type MainTabsParamList = {
-  Leads: undefined;
-  Clinics: undefined;
-  ClinicDetail: undefined;
-  Profile: undefined;
-};
+import type { MainTabsParamList } from '@navigation/types';
 
 const Tab = createBottomTabNavigator<MainTabsParamList>();
 

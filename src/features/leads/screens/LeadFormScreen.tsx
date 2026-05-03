@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createLead, updateLead } from '@features/leads/api/leads.api';
 import { useLeadStore } from '@features/leads/stores/leadStore';
-import type { Lead, NewLead } from '@features/leads/api/leads.api';
+import type { NewLead } from '@features/leads/api/leads.api';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabsParamList } from '@navigation/types';
@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
   content: { padding: 16 },
   input: { marginBottom: 8, backgroundColor: '#fff' },
   button: { marginTop: 8 },
-  error: { color: '#b00020', fontSize: 12, marginLeft: 4, marginBottom: 8 },
 });
 
 export { LeadFormScreen };

@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Text, Button, Appbar, Card, Title, Paragraph } from 'react-native-paper';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchClinic, updateClinic, exportClinicLeads } from '@features/clinics/api/clinics.api';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { fetchClinic, exportClinicLeads } from '@features/clinics/api/clinics.api';
 import { useClinicStore } from '@features/clinics/stores/clinicStore';
-import type { Clinic } from '@features/clinics/api/clinics.api';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabsParamList } from '@navigation/types';
@@ -14,20 +13,11 @@ type NavigationProp = NativeStackNavigationProp<MainTabsParamList, 'Clinics'>;
 function ClinicDetailScreen() {
   const navigation = useNavigation<NavigationProp>();
   const { activeClinic } = useClinicStore();
-  const queryClient = useQueryClient();
 
   const { data: clinic, isLoading, error } = useQuery({
     queryKey: ['clinic', activeClinic?.id],
     queryFn: () => fetchClinic(activeClinic!.id),
     enabled: !!activeClinic?.id,
-  });
-
-  useMutation({
-    mutationFn: (data: Parameters<typeof updateClinic>[1]) => updateClinic(activeClinic!.id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clinics'] });
-      queryClient.invalidateQueries({ queryKey: ['clinic', activeClinic?.id] });
-    },
   });
 
   const { mutate: exportMutate, isPending: isExporting } = useMutation({
