@@ -7,7 +7,6 @@ import {
   fetchLeadFunnel,
   fetchDispatchDashboardSessions,
 } from '@features/dashboard/api/dashboard.api';
-import { BarChart } from 'react-native-gifted-charts';
 
 const STATUS_COLORS = {
   OUTREACH: '#2196F3',
@@ -51,16 +50,20 @@ export function DashboardScreen() {
 
   const funnelData = funnel
     ? [
-        { value: funnel.OUTREACH || 0, label: 'Prospecção', frontColor: STATUS_COLORS.OUTREACH },
+        { value: funnel.OUTREACH || 0, text: 'Prospecção', frontColor: STATUS_COLORS.OUTREACH },
         {
           value: funnel.TESTIMONIAL || 0,
-          label: 'Depoimento',
+          text: 'Depoimento',
           frontColor: STATUS_COLORS.TESTIMONIAL,
         },
-        { value: funnel.CLOSURE || 0, label: 'Encerramento', frontColor: STATUS_COLORS.CLOSURE },
-        { value: funnel.FINALIZED || 0, label: 'Finalizado', frontColor: STATUS_COLORS.FINALIZED },
+        { value: funnel.CLOSURE || 0, text: 'Encerramento', frontColor: STATUS_COLORS.CLOSURE },
+        { value: funnel.FINALIZED || 0, text: 'Finalizado', frontColor: STATUS_COLORS.FINALIZED },
       ]
     : [];
+
+  const maxFunnelValue = funnel
+    ? Math.max(funnel.OUTREACH || 0, funnel.TESTIMONIAL || 0, funnel.CLOSURE || 0, funnel.FINALIZED || 0, 1)
+    : 1;
 
   if (isLoading) {
     return (
@@ -112,18 +115,24 @@ export function DashboardScreen() {
         <Card style={styles.card}>
           <Card.Content>
             {funnelData.length > 0 ? (
-              <View style={styles.chartContainer}>
-                <BarChart
-                  data={funnelData}
-                  width={280}
-                  height={180}
-                  barWidth={50}
-                  spacing={20}
-                  roundedTop
-                  hideRules
-                  xAxisLabelTextStyle={styles.chartAxisText}
-                  yAxisTextStyle={styles.chartAxisText}
-                />
+              <View style={styles.funnelContainer}>
+                {funnelData.map((item, index) => (
+                  <View key={index} style={styles.funnelItem}>
+                    <Text style={styles.funnelLabel}>{item.text}</Text>
+                    <View style={styles.funnelBarBg}>
+                      <View
+                        style={[
+                          styles.funnelBar,
+                          {
+                            width: `${item.value > 0 ? (item.value / maxFunnelValue) * 100 : 0}%`,
+                            backgroundColor: item.frontColor,
+                          },
+                        ]}
+                      />
+                    </View>
+                    <Text style={styles.funnelValue}>{item.value}</Text>
+                  </View>
+                ))}
               </View>
             ) : (
               <Text style={styles.emptyText}>Nenhum dado disponível</Text>
@@ -193,8 +202,12 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 28, fontWeight: 'bold', textAlign: 'center' },
   statLabel: { fontSize: 12, color: '#666', textAlign: 'center', marginTop: 4 },
   card: { marginBottom: 16 },
-  chartContainer: { alignItems: 'center', paddingVertical: 16 },
-  chartAxisText: { fontSize: 10, color: '#666' },
+  funnelContainer: { paddingVertical: 8 },
+  funnelItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  funnelLabel: { width: 90, fontSize: 13, color: '#333' },
+  funnelBarBg: { flex: 1, height: 20, backgroundColor: '#eee', borderRadius: 4 },
+  funnelBar: { height: 20, borderRadius: 4 },
+  funnelValue: { width: 40, textAlign: 'right', fontSize: 13, fontWeight: 'bold' },
   emptyText: { textAlign: 'center', color: '#666', paddingVertical: 16 },
   sessionItem: {
     flexDirection: 'row',
