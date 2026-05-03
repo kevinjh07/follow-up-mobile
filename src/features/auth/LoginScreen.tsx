@@ -1,90 +1,146 @@
-import { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text, Title } from 'react-native-paper';
+import React from 'react';
+import { View, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { TextInput, Button, Text, Title, useTheme } from 'react-native-paper';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useAuthStore } from '@core/stores/authStore';
+import { useMutation } from '@tanstack/react-query';
 import { api } from '@core/services/api';
-import type { User } from '@core/types';
+
+const loginSchema = z.object({
+  email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
+  password: z.string().min(1, 'Senha é obrigatória').min(6, 'Senha deve ter pelo menos 6 caracteres'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const theme = useTheme();
   const setUser = useAuthStore((s) => s.setUser);
   const setToken = useAuthStore((s) => s.setToken);
 
-  async function handleLogin() {
-    if (!email || !password) {
-      Alert.alert('Erro', 'Preencha todos os campos');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await api.post<{ user: User; token: string }>('/auth/login', {
-        email,
-        password,
-      });
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: LoginFormData) => api.post('/auth/login', data),
+    onSuccess: (response) => {
       setUser(response.data.user);
       setToken(response.data.token);
-    } catch {
-      Alert.alert('Erro', 'Falha no login. Verifique suas credenciais.');
-    } finally {
-      setLoading(false);
-    }
-  }
+    },
+    onError: (error: unknown) => {
+      const status = (error as { response?: { status?: number } })?.response?.status;
+      if (status === 401) {
+        Alert.alert('Erro', 'E-mail ou senha inválidos');
+      } else {
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor');
+      }
+    },
+  });
+
+  const { control, handleSubmit, formState } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const onSubmit = (data: LoginFormData) => mutate(data);
 
   return (
-    <View style={styles.container}>
-      <Title style={styles.title}>Follow-Up</Title>
-      <Text style={styles.subtitle}>Gestão de Clínicas</Text>
+    <SafeAreaView style={styles.flex}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.flex}
+      >
+        <View style={styles.container}>
+          <Title style={styles.title}>Follow-Up</Title>
+          <Text style={styles.subtitle}>Gestão de Clínicas</Text>
 
-      <TextInput
-        label="E-mail"
-        value={email}
-        onChangeText={setEmail}
-        mode="outlined"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        style={styles.input}
-      />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                error={!!formState.errors.email}
+                style={styles.input}
+              />
+            )}
+          />
+          {formState.errors.email && (
+            <Text style={[styles.error, { color: theme.colors.error }]}>
+              {formState.errors.email.message}
+            </Text>
+          )}
 
-      <TextInput
-        label="Senha"
-        value={password}
-        onChangeText={setPassword}
-        mode="outlined"
-        secureTextEntry
-        style={styles.input}
-      />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                placeholder="Senha"
+                value={value}
+                onChangeText={onChange}
+                secureTextEntry
+                error={!!formState.errors.password}
+                style={styles.input}
+              />
+            )}
+          />
+          {formState.errors.password && (
+            <Text style={[styles.error, { color: theme.colors.error }]}>
+              {formState.errors.password.message}
+            </Text>
+          )}
 
-      <Button mode="contained" onPress={handleLogin} loading={loading} style={styles.button}>
-        Entrar
-      </Button>
-    </View>
+          <Button
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}
+            loading={isPending}
+            disabled={isPending}
+            style={styles.button}
+            accessibilityRole="button"
+            accessibilityLabel="Entrar"
+          >
+            Entrar
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
   container: {
     flex: 1,
-    padding: 24,
     justifyContent: 'center',
+    padding: 24,
   },
   title: {
     fontSize: 32,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   subtitle: {
+    fontSize: 16,
     textAlign: 'center',
     marginBottom: 32,
-    opacity: 0.7,
+    color: '#666',
   },
   input: {
-    marginBottom: 16,
+    marginBottom: 8,
+    backgroundColor: '#fff',
   },
   button: {
-    marginTop: 8,
+    marginTop: 16,
     paddingVertical: 4,
+  },
+  error: {
+    fontSize: 12,
+    marginBottom: 8,
+    marginLeft: 4,
   },
 });

@@ -1,25 +1,24 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuthStore } from '@core/stores/authStore';
-import { LoginScreen } from '@features/auth/LoginScreen';
+import { AuthGate } from './authGuard';
+import { LoginScreen } from '@features/auth';
 import { MainTabs } from './MainTabs';
+import { navigationRef } from './navigationRef';
 
-export type RootStackParamList = {
-  Login: undefined;
-  Main: undefined;
-};
+const Stack = createNativeStackNavigator();
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-export function RootNavigator() {
-  const { user } = useAuthStore();
-
+function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {user ? (
-        <Stack.Screen name="Main" component={MainTabs} />
-      ) : (
-        <Stack.Screen name="Login" component={LoginScreen} />
-      )}
-    </Stack.Navigator>
+    <NavigationContainer ref={navigationRef}>
+      <AuthGate>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Navigator>
+      </AuthGate>
+    </NavigationContainer>
   );
 }
+
+export default RootNavigator;

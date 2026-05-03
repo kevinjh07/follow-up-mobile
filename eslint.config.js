@@ -18,6 +18,7 @@ export default [
       globals: {
         __DEV__: 'readonly',
         React: 'readonly',
+        jest: 'readonly',
       },
     },
     plugins: {
@@ -55,6 +56,9 @@ export default [
       'babel.config.js',
       'metro.config.js',
       'eslint.config.js',
+      'src/testing/**',
+      'jest.config.js',
+      'babel.config.test.js',
     ],
   },
   prettier,

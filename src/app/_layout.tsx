@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Slot } from 'expo-router';
 import { ThemeProvider } from 'react-native-paper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '@core/stores/authStore';
 import { theme } from '@core/theme';
+import RootNavigator from '@navigation/RootNavigator';
+import { StatusBar } from 'expo-status-bar';
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,8 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <Slot />
+        <StatusBar style="auto" />
+        <RootNavigator />
       </ThemeProvider>
     </QueryClientProvider>
   );
