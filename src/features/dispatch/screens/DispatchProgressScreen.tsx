@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { Text, Button, Appbar, Card, Title, ProgressBar, Divider, ActivityIndicator } from 'react-native-paper';
+import { Text, Button, Appbar, Card, Title, ProgressBar, ActivityIndicator } from 'react-native-paper';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { getDispatchSessionStatus, cancelDispatchSession, type DispatchStreamEvent } from '@features/dispatch/api/dispatch.api';
+import { getDispatchSessionStatus, cancelDispatchSession } from '@features/dispatch/api/dispatch.api';
 import { useDispatchStore } from '@features/dispatch/stores/dispatchStore';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,8 +15,7 @@ export function DispatchProgressScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<DispatchProgressRouteProp>();
   const { sessionId } = route.params || {};
-  const { currentSession, setCurrentSession, events, addEvent, clearEvents } = useDispatchStore();
-  const [progress, setProgress] = useState(0);
+  const { currentSession, setCurrentSession, events, clearEvents } = useDispatchStore();
 
   const { data: session, isLoading } = useQuery({
     queryKey: ['dispatch-session', sessionId],
@@ -25,16 +24,18 @@ export function DispatchProgressScreen() {
     refetchInterval: 2000,
   });
 
+  const progress = useMemo(() => {
+    if (!session) return 0;
+    if (session.status === 'COMPLETED' || session.status === 'FAILED') return 1;
+    if (session.total > 0) return (session.successful + session.failed) / session.total;
+    return 0;
+  }, [session?.status, session?.successful, session?.failed, session?.total]);
+
   useEffect(() => {
     if (session) {
       setCurrentSession(session);
-      if (session.status === 'COMPLETED' || session.status === 'FAILED') {
-        setProgress(1);
-      } else if (session.total > 0) {
-        setProgress((session.successful + session.failed) / session.total);
-      }
     }
-  }, [session]);
+  }, [session, setCurrentSession]);
 
   const cancelMutation = useMutation({
     mutationFn: () => cancelDispatchSession(sessionId!),
@@ -61,34 +62,23 @@ export function DispatchProgressScreen() {
   const getStatusLabel = () => {
     if (!session) return 'Carregando...';
     switch (session.status) {
-      case 'QUEUED':
-        return 'Aguardando...';
-      case 'RUNNING':
-        return 'Em andamento';
-      case 'COMPLETED':
-        return 'Concluído';
-      case 'CANCELLED':
-        return 'Cancelado';
-      case 'FAILED':
-        return 'Falhou';
-      default:
-        return session.status;
+      case 'QUEUED': return 'Aguardando...';
+      case 'RUNNING': return 'Em andamento';
+      case 'COMPLETED': return 'Concluído';
+      case 'CANCELLED': return 'Cancelado';
+      case 'FAILED': return 'Falhou';
+      default: return session.status;
     }
   };
 
   const getStatusColor = () => {
     if (!session) return '#999';
     switch (session.status) {
-      case 'COMPLETED':
-        return '#4caf50';
-      case 'CANCELLED':
-        return '#999';
-      case 'FAILED':
-        return '#b00020';
-      case 'RUNNING':
-        return '#2196f3';
-      default:
-        return '#999';
+      case 'COMPLETED': return '#4caf50';
+      case 'CANCELLED': return '#999';
+      case 'FAILED': return '#b00020';
+      case 'RUNNING': return '#2196f3';
+      default: return '#999';
     }
   };
 
@@ -112,29 +102,20 @@ export function DispatchProgressScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Title>Progresso</Title>
-            <Divider style={styles.divider} />
             <View style={styles.progressInfo}>
               <Text style={styles.statusLabel}>{getStatusLabel()}</Text>
               <Text style={styles.progressText}>
                 {currentSession?.successful || 0} / {currentSession?.total || 0}
               </Text>
             </View>
-            <ProgressBar
-              progress={progress}
-              color={getStatusColor()}
-              style={styles.progressBar}
-            />
+            <ProgressBar progress={progress} color={getStatusColor()} style={styles.progressBar} />
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#4caf50' }]}>
-                  {currentSession?.successful || 0}
-                </Text>
+                <Text style={[styles.statValue, { color: '#4caf50' }]}>{currentSession?.successful || 0}</Text>
                 <Text style={styles.statLabel}>Enviados</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#b00020' }]}>
-                  {currentSession?.failed || 0}
-                </Text>
+                <Text style={[styles.statValue, { color: '#b00020' }]}>{currentSession?.failed || 0}</Text>
                 <Text style={styles.statLabel}>Falhas</Text>
               </View>
             </View>
@@ -145,31 +126,18 @@ export function DispatchProgressScreen() {
           <Card style={styles.card}>
             <Card.Content>
               <Title>Eventos Recentes</Title>
-              <Divider style={styles.divider} />
               <FlatList
                 data={events.slice(-10).reverse()}
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={({ item }) => {
                   if (item.type === 'progress') {
-                    return (
-                      <Text style={styles.eventText}>
-                        ✓ Enviado para {item.result.phone}
-                      </Text>
-                    );
+                    return <Text style={styles.eventText}>✓ Enviado para {item.result.phone}</Text>;
                   }
                   if (item.type === 'error') {
-                    return (
-                      <Text style={[styles.eventText, { color: '#b00020' }]}>
-                        ✗ Erro: {item.error}
-                      </Text>
-                    );
+                    return <Text style={[styles.eventText, { color: '#b00020' }]}>✗ Erro: {item.error}</Text>;
                   }
                   if (item.type === 'sending') {
-                    return (
-                      <Text style={styles.eventText}>
-                        → Enviando para {item.phone}...
-                      </Text>
-                    );
+                    return <Text style={styles.eventText}>→ Enviando para {item.phone}...</Text>;
                   }
                   return null;
                 }}
@@ -202,7 +170,6 @@ const styles = StyleSheet.create({
   content: { flex: 1, padding: 16 },
   loadingText: { marginTop: 12 },
   card: { marginBottom: 16 },
-  divider: { marginVertical: 12 },
   progressInfo: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
   statusLabel: { fontSize: 16, fontWeight: 'bold' },
   progressText: { fontSize: 16, color: '#666' },
