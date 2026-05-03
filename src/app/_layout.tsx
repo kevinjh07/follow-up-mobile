@@ -7,8 +7,14 @@ import RootNavigator from '@navigation/RootNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SnackbarProvider } from '@shared/components/SnackbarProvider';
+import { useNotifications } from '@core/hooks/useNotifications';
 
 const queryClient = new QueryClient();
+
+function NotificationsManager() {
+  useNotifications();
+  return null;
+}
 
 export default function RootLayout() {
   const { loadUser } = useAuthStore();
@@ -22,6 +28,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <SnackbarProvider>
+            <NotificationsManager />
             <StatusBar style="auto" />
             <RootNavigator />
           </SnackbarProvider>
