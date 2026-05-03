@@ -2,13 +2,15 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { LeadsScreen } from '@features/leads/screens/LeadsScreen';
+import { LeadsScreen } from '@features/dispatch/screens/LeadsDispatchScreen';
 import { LeadDetailScreen } from '@features/leads/screens/LeadDetailScreen';
 import { LeadFormScreen } from '@features/leads/screens/LeadFormScreen';
 import { ClinicsScreen } from '@features/clinics/screens/ClinicsScreen';
 import { ClinicDetailScreen } from '@features/clinics/screens/ClinicDetailScreen';
 import { ClinicFormScreen } from '@features/clinics/screens/ClinicFormScreen';
 import { ProfileScreen } from '@features/profile/ProfileScreen';
+import { DispatchConfirmScreen } from '@features/dispatch/screens/DispatchConfirmScreen';
+import { DispatchProgressScreen } from '@features/dispatch/screens/DispatchProgressScreen';
 import type { MainTabsParamList } from '@navigation/types';
 
 type ClinicsStackParamList = {
@@ -21,6 +23,8 @@ type LeadsStackParamList = {
   LeadsList: undefined;
   LeadDetail: undefined;
   LeadForm: undefined;
+  DispatchConfirm: undefined;
+  DispatchProgress: { sessionId: string };
 };
 
 const Tab = createBottomTabNavigator<MainTabsParamList>();
@@ -43,6 +47,8 @@ function LeadsStackScreen() {
       <LeadsStack.Screen name="LeadsList" component={LeadsScreen} />
       <LeadsStack.Screen name="LeadDetail" component={LeadDetailScreen} />
       <LeadsStack.Screen name="LeadForm" component={LeadFormScreen} />
+      <LeadsStack.Screen name="DispatchConfirm" component={DispatchConfirmScreen} />
+      <LeadsStack.Screen name="DispatchProgress" component={DispatchProgressScreen} />
     </LeadsStack.Navigator>
   );
 }

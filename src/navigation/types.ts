@@ -24,4 +24,14 @@ export type MainTabsParamList = {
   QRCodeDialog: { clinicId: string };
   PairingCodeDialog: { clinicId: string };
   WhatsAppSettings: { clinicId: string };
+  DispatchConfirm: undefined;
+  DispatchProgress: { sessionId: string };
+};
+
+export type LeadsStackParamList = {
+  LeadsList: undefined;
+  LeadDetail: undefined;
+  LeadForm: undefined;
+  DispatchConfirm: undefined;
+  DispatchProgress: { sessionId: string };
 };
