@@ -1,18 +1,31 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { Text, Card, List, FAB } from 'react-native-paper';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { Text, Card, List, FAB, Searchbar } from 'react-native-paper';
 import { useQuery } from '@tanstack/react-query';
 import { fetchClinics } from '@features/clinics/api/clinics.api';
 import { useClinicStore } from '@features/clinics/stores/clinicStore';
 import type { Clinic } from '@features/clinics/api/clinics.api';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { MainTabsParamList } from '@navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<MainTabsParamList, 'Clinics'>;
+
+const WHATSAPP_STATUS_COLORS = {
+  disconnected: '#999',
+  connecting: '#f0a500',
+  connected: '#4caf50',
+};
 
 function ClinicsScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const setActiveClinic = useClinicStore((s) => s.setActiveClinic);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const {
     data: clinics,
-    isLoading,
-    error,
+    isLoading: _isLoading,
+    error: _error,
     refetch,
     isRefetching,
   } = useQuery({
@@ -20,32 +33,29 @@ function ClinicsScreen() {
     queryFn: fetchClinics,
   });
 
-  if (isLoading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" accessibilityLabel="Carregando clínicas" />
-      </View>
+  const filteredClinics = React.useMemo(() => {
+    if (!clinics) return [];
+    if (!searchQuery.trim()) return clinics;
+    const query = searchQuery.toLowerCase();
+    return clinics.filter(
+      (c) =>
+        c.name.toLowerCase().includes(query) ||
+        c.cnpj.includes(query)
     );
-  }
+  }, [clinics, searchQuery]);
 
-  if (error) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.error}>Erro ao carregar clínicas</Text>
-      </View>
-    );
-  }
+  const handleClinicPress = (clinic: Clinic) => {
+    setActiveClinic(clinic);
+    navigation.navigate('ClinicDetail');
+  };
 
-  if (!clinics || clinics.length === 0) {
-    return (
-      <View style={styles.center}>
-        <Text>Nenhuma clínica encontrada</Text>
-      </View>
-    );
-  }
+  const handleAddClinic = () => {
+    setActiveClinic(null);
+    navigation.navigate('ClinicForm');
+  };
 
   const renderItem = ({ item }: { item: Clinic }) => (
-    <Card style={styles.card} onPress={() => setActiveClinic(item)}>
+    <Card style={styles.card} onPress={() => handleClinicPress(item)}>
       <Card.Content>
         <List.Item
           title={item.name}
@@ -54,7 +64,10 @@ function ClinicsScreen() {
             <View
               style={[
                 styles.badge,
-                item.whatsappStatus === 'connected' ? styles.badgeConnected : styles.badgeDisconnected,
+                {
+                  backgroundColor:
+                    WHATSAPP_STATUS_COLORS[item.whatsappStatus] || WHATSAPP_STATUS_COLORS.disconnected,
+                },
               ]}
             >
               <Text style={styles.badgeText}>{item.whatsappStatus}</Text>
@@ -69,23 +82,26 @@ function ClinicsScreen() {
 
   return (
     <View style={styles.container}>
+      <Searchbar
+        placeholder="Buscar clínica por nome ou CNPJ"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        style={styles.searchbar}
+      />
       <FlatList
         testID="clinics-list"
-        data={clinics}
+        data={filteredClinics}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        contentContainerStyle={filteredClinics.length === 0 ? styles.center : undefined}
+        ListEmptyComponent={
+          <View style={styles.center}>
+            <Text>{searchQuery ? 'Nenhuma clínica encontrada' : 'Nenhuma clínica cadastrada'}</Text>
+          </View>
         }
-        contentContainerStyle={clinics.length === 0 ? styles.center : undefined}
       />
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={() => {}}
-        accessibilityRole="button"
-        accessibilityLabel="Adicionar clínica"
-      />
+      <FAB icon="plus" style={styles.fab} onPress={handleAddClinic} accessibilityLabel="Adicionar clínica" />
     </View>
   );
 }
@@ -99,16 +115,15 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   card: { margin: 8 },
-  error: { color: 'red', textAlign: 'center' },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
+    alignSelf: 'center',
   },
   badgeText: { color: '#fff', fontSize: 12 },
-  badgeConnected: { backgroundColor: '#6200ee' },
-  badgeDisconnected: { backgroundColor: '#999' },
   fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 },
+  searchbar: { margin: 8 },
 });
 
 export { ClinicsScreen };

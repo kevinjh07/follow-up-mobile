@@ -75,6 +75,11 @@ function LeadDetailScreen() {
           navigation.goBack();
         }} accessibilityLabel="Voltar" />
         <Appbar.Content title={lead.name} />
+        <Appbar.Action
+          icon="pencil"
+          onPress={() => navigation.navigate('LeadForm')}
+          accessibilityLabel="Editar lead"
+        />
       </Appbar.Header>
 
       <ScrollView style={styles.content}>

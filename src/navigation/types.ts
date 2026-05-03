@@ -14,5 +14,8 @@ export type MainTabsParamList = {
   Clinics: undefined;
   Leads: undefined;
   ClinicDetail: undefined;
+  ClinicForm: undefined;
+  LeadDetail: undefined;
+  LeadForm: undefined;
   Profile: undefined;
 };

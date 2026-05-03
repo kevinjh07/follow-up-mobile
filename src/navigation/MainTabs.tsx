@@ -1,11 +1,51 @@
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LeadsScreen } from '@features/leads/screens/LeadsScreen';
+import { LeadDetailScreen } from '@features/leads/screens/LeadDetailScreen';
+import { LeadFormScreen } from '@features/leads/screens/LeadFormScreen';
 import { ClinicsScreen } from '@features/clinics/screens/ClinicsScreen';
+import { ClinicDetailScreen } from '@features/clinics/screens/ClinicDetailScreen';
+import { ClinicFormScreen } from '@features/clinics/screens/ClinicFormScreen';
 import { ProfileScreen } from '@features/profile/ProfileScreen';
 import type { MainTabsParamList } from '@navigation/types';
 
+type ClinicsStackParamList = {
+  ClinicsList: undefined;
+  ClinicDetail: undefined;
+  ClinicForm: undefined;
+};
+
+type LeadsStackParamList = {
+  LeadsList: undefined;
+  LeadDetail: undefined;
+  LeadForm: undefined;
+};
+
 const Tab = createBottomTabNavigator<MainTabsParamList>();
+const ClinicsStack = createNativeStackNavigator<ClinicsStackParamList>();
+const LeadsStack = createNativeStackNavigator<LeadsStackParamList>();
+
+function ClinicsStackScreen() {
+  return (
+    <ClinicsStack.Navigator screenOptions={{ headerShown: false }}>
+      <ClinicsStack.Screen name="ClinicsList" component={ClinicsScreen} />
+      <ClinicsStack.Screen name="ClinicDetail" component={ClinicDetailScreen} />
+      <ClinicsStack.Screen name="ClinicForm" component={ClinicFormScreen} />
+    </ClinicsStack.Navigator>
+  );
+}
+
+function LeadsStackScreen() {
+  return (
+    <LeadsStack.Navigator screenOptions={{ headerShown: false }}>
+      <LeadsStack.Screen name="LeadsList" component={LeadsScreen} />
+      <LeadsStack.Screen name="LeadDetail" component={LeadDetailScreen} />
+      <LeadsStack.Screen name="LeadForm" component={LeadFormScreen} />
+    </LeadsStack.Navigator>
+  );
+}
 
 export function MainTabs() {
   return (
@@ -17,7 +57,7 @@ export function MainTabs() {
     >
       <Tab.Screen
         name="Leads"
-        component={LeadsScreen}
+        component={LeadsStackScreen}
         options={{
           title: 'Leads',
           tabBarIcon: ({ color, size }) => (
@@ -27,7 +67,7 @@ export function MainTabs() {
       />
       <Tab.Screen
         name="Clinics"
-        component={ClinicsScreen}
+        component={ClinicsStackScreen}
         options={{
           title: 'Clínicas',
           tabBarIcon: ({ color, size }) => (
