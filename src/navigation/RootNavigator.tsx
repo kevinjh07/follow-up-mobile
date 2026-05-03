@@ -12,12 +12,19 @@ import { PrivacyScreen } from '@features/privacy/screens/PrivacyScreen';
 import { MainTabs } from './MainTabs';
 import { navigationRef } from './navigationRef';
 import type { RootStackParamList } from '@navigation/types';
+import { useNotifications } from '@core/hooks/useNotifications';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function NavigationContent() {
+  useNotifications();
+  return null;
+}
 
 function RootNavigator() {
   return (
     <NavigationContainer ref={navigationRef}>
+      <NavigationContent />
       <AuthGate>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Main" component={MainTabs} />

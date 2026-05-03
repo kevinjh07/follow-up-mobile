@@ -1,32 +1,47 @@
 import { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import {
-  requestNotificationPermissions,
-  getExpoPushToken,
-  addNotificationResponseReceivedListener,
-} from '@core/services/notifications';
+import { useNavigation as useNav } from '@react-navigation/native';
+
+const isExpoGo = !__DEV__;
 
 export function useNotifications() {
-  const navigation = useNavigation();
+  const navigation = useNav();
 
   useEffect(() => {
-    const setupNotifications = async () => {
-      await requestNotificationPermissions();
-      const token = await getExpoPushToken();
-      if (token) {
-        console.log('Push token:', token);
+    if (isExpoGo) return;
+
+    let subscription: { remove: () => void } | null = null;
+
+    const setup = async () => {
+      try {
+        const {
+          requestNotificationPermissions,
+          getExpoPushToken,
+          addNotificationResponseReceivedListener,
+        } = await import('@core/services/notifications');
+
+        await requestNotificationPermissions();
+        const token = await getExpoPushToken();
+        if (token) {
+          console.log('Push token:', token);
+        }
+
+        subscription = addNotificationResponseReceivedListener((response) => {
+          const data = response.notification.request.content.data;
+          if (data?.route) {
+            navigation.navigate(data.route as never);
+          }
+        });
+      } catch {
+        // Notifications not available
       }
     };
 
-    setupNotifications();
+    setup();
 
-    const subscription = addNotificationResponseReceivedListener((response) => {
-      const data = response.notification.request.content.data;
-      if (data?.route) {
-        navigation.navigate(data.route as never);
+    return () => {
+      if (subscription) {
+        subscription.remove();
       }
-    });
-
-    return () => subscription.remove();
+    };
   }, [navigation]);
 }
