@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Clinic } from '../api/clinics.api';
+import type { Clinic } from '@features/clinics/api/clinics.api';
 
 interface ClinicState {
   activeClinic: Clinic | null;
