@@ -2,11 +2,6 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Snackbar } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
-interface SnackbarMessage {
-  message: string;
-  type: 'success' | 'error' | 'info';
-}
-
 interface SnackbarContextType {
   showSuccess: (message: string) => void;
   showError: (message: string) => void;

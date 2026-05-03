@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { Text, Card, Searchbar, Chip, FAB, Checkbox, Button, Appbar, ActivityIndicator } from 'react-native-paper';
+import { Text, Card, Searchbar, Chip, FAB, Checkbox, Button, Appbar } from 'react-native-paper';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLeads } from '@features/leads/api/leads.api';
 import { useClinicStore } from '@features/clinics/stores/clinicStore';
