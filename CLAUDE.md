@@ -40,12 +40,12 @@ This file provides guidance to Claude Code when working with code in this reposi
 Sempre use aliases. Nunca caminhos relativos (`../../../`).
 
 ```typescript
-// ✅ Correto
+// Correto
 import { api } from '@core/services/api';
 import { useAuthStore } from '@core/stores/authStore';
 import { Button } from '@shared/components';
 
-// ❌ Errado
+// Errado
 import { api } from '../../../core/services/api';
 ```
 
@@ -62,7 +62,7 @@ import { api } from '../../../core/services/api';
 Nunca use `useEffect` + `fetch`. Sempre use `useQuery` / `useMutation`.
 
 ```typescript
-// ✅ Correto
+// Correto
 import { useQuery } from '@tanstack/react-query';
 
 const { data, isLoading } = useQuery({
@@ -70,7 +70,7 @@ const { data, isLoading } = useQuery({
   queryFn: fetchLeads,
 });
 
-// ❌ Errado
+// Errado
 useEffect(() => {
   fetch('/api/leads').then(...); // PROIBIDO
 }, []);
@@ -81,10 +81,10 @@ useEffect(() => {
 Sempre que possível, use componentes do React Native Paper. Evite criar componentes base do zero.
 
 ```typescript
-// ✅ Correto
+// Correto
 import { Button, TextInput, Card, List, Dialog } from 'react-native-paper';
 
-// ❌ Errado
+// Errado
 import { Button, TextInput } from 'react-native'; // só se absolutamente necessário
 ```
 
@@ -144,13 +144,13 @@ const { control, handleSubmit } = useForm<FormData>({
 ### 1. Separação de Responsabilidades (Container/Presentational)
 
 ```typescript
-// ✅ Screen (container) - orquestra lógica e estado
+// Screen (container) - orquestra lógica e estado
 export function LeadListScreen() {
   const { data, isLoading } = useLeadsQuery();
   return <LeadListView leads={data} isLoading={isLoading} />;
 }
 
-// ✅ Componente (presentational) - apenas UI
+// Componente (presentational) - apenas UI
 function LeadListView({ leads, isLoading }: LeadListViewProps) {
   if (isLoading) return <LoadingOverlay />;
   return <FlatList data={leads} renderItem={renderItem} />;
@@ -176,24 +176,24 @@ Regras:
 
 Anti-padrões proibidos:
 
-- ❌ `useEffect` para fetch de dados → Use `useQuery`
-- ❌ Props drilling > 2 níveis → Use store ou composition
-- ❌ Estado duplicado entre Zustand e useState → Fonte única de verdade
-- ❌ Mutar estado diretamente → Sempre via setters/actions
+- Proibido: `useEffect` para fetch de dados → Use `useQuery`
+- Proibido: Props drilling > 2 níveis → Use store ou composition
+- Proibido: Estado duplicado entre Zustand e useState → Fonte única de verdade
+- Proibido: Mutar estado diretamente → Sempre via setters/actions
 
 ### 3. Performance Mobile
 
 ```typescript
-// ✅ Memoize componentes pesados ou listas
+// Memoize componentes pesados ou listas
 const MemoizedCard = React.memo(LeadCard, (prev, next) => prev.id === next.id);
 
-// ✅ useMemo para cálculos caros
+// useMemo para cálculos caros
 const sortedLeads = useMemo(() => [...leads].sort(...), [leads]);
 
-// ✅ useCallback para funções passadas como props
+// useCallback para funções passadas como props
 const handlePress = useCallback((id: string) => { ... }, []);
 
-// ✅ FlatList para listas (nunca ScrollView + map)
+// FlatList para listas (nunca ScrollView + map)
 <FlatList
   data={data}
   keyExtractor={(item) => item.id}
@@ -214,14 +214,14 @@ Regras:
 ### 4. Navegação — Tipagem e Padrões
 
 ```typescript
-// ✅ Tipagem forte de rotas
+// Tipagem forte de rotas
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   LeadDetails: { leadId: string };
 };
 
-// ✅ Hook tipado
+// Hook tipado
 const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 const route = useRoute<RouteProp<RootStackParamList, 'LeadDetails'>>();
 ```
@@ -235,7 +235,7 @@ Regras:
 ### 5. Tratamento de Erros e Resiliência
 
 ```typescript
-// ✅ Tratamento centralizado em queries
+// Tratamento centralizado em queries
 const { data, error, isError } = useQuery({
   queryKey: ['leads'],
   queryFn: fetchLeads,
@@ -245,7 +245,7 @@ const { data, error, isError } = useQuery({
   },
 });
 
-// ✅ UI de erro por tela
+// UI de erro por tela
 if (isError) return <ErrorRetryView message={error.message} onRetry={refetch} />;
 ```
 
@@ -259,7 +259,7 @@ Regras:
 ### 6. Acessibilidade (a11y)
 
 ```typescript
-// ✅ Props de acessibilidade obrigatórias
+// Props de acessibilidade obrigatórias
 <Pressable
   accessible
   accessibilityRole="button"

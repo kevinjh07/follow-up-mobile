@@ -2,8 +2,6 @@
 
 Aplicativo mobile para o sistema Follow-Up de gestão de clínicas médicas. Consome a API REST do Follow-Up para gerenciar leads, cadências de contato via WhatsApp e operações multi-clínicas.
 
----
-
 ## Visão Geral
 
 O app permite que atendentes e administradores gerenciem leads cadastrados por clínica e acompanhem o envio automático de mensagens WhatsApp seguindo a cadência de 4 etapas:
@@ -14,8 +12,6 @@ O app permite que atendentes e administradores gerenciem leads cadastrados por c
 | Atendimento 03 | `TESTIMONIAL` | 48 h  | Sim (imagem) |
 | Atendimento 04 | `CLOSURE`     | 72 h  | Não          |
 | Finalizado     | `FINALIZED`   | —     | —            |
-
----
 
 ## Stack
 
@@ -32,8 +28,6 @@ O app permite que atendentes e administradores gerenciem leads cadastrados por c
 | Armazenamento | Expo Secure Store (tokens)               |
 | Gráficos      | React Native Gifted Charts               |
 
----
-
 ## Pré-requisitos
 
 - **Node.js** 24.14.1 (LTS)
@@ -49,8 +43,6 @@ O app permite que atendentes e administradores gerenciem leads cadastrados por c
 ### iOS (apenas macOS)
 - Xcode 15+
 - CocoaPods (`sudo gem install cocoapods`)
-
----
 
 ## Instalação
 
@@ -74,8 +66,6 @@ EXPO_PUBLIC_ENV=development
 ```
 
 > **Nota**: Para dispositivos físicos ou emuladores externos, use o IP da máquina onde a API está rodando (ex: `http://192.168.1.100:3000`) em vez de `localhost`.
-
----
 
 ## Execução
 
@@ -107,8 +97,6 @@ npm run web
 | Atendente | `atendente@followupmac.com` | `Atendente@123` |
 | Ops       | `ops@followupmac.com`       | `Ops@123`       |
 
----
-
 ## Scripts Disponíveis
 
 ```bash
@@ -127,8 +115,6 @@ npm run typecheck  # TypeScript --noEmit (verificação de tipos)
 ```bash
 npm run lint && npm run typecheck
 ```
-
----
 
 ## Estrutura do Projeto
 
@@ -155,8 +141,6 @@ src/
 | Stores      | `camelCase` + sufixo `Store` → `authStore.ts`    |
 | API clients | `camelCase` → `leads.api.ts`                     |
 
----
-
 ## Testes
 
 - **Framework**: Jest + Testing Library React Native
@@ -182,8 +166,6 @@ Para **todas as novas features**, siga o ciclo **Red → Green → Refactor**:
 2. **Implemente o código mínimo** para fazer o teste passar (**Green**).
 3. **Refatore** mantendo o teste verde, aplicando as convenções de código.
 
----
-
 ## Regras de Código
 
 - **Funções**: 4-20 linhas. Divida se for maior.
@@ -204,13 +186,9 @@ Para **todas as novas features**, siga o ciclo **Red → Green → Refactor**:
 
 **Proibido**: `useEffect` para fetch de dados → use `useQuery`.
 
----
-
 ## Contribuição
 
 Veja o arquivo [CONTRIBUTING.md](CONTRIBUTING.md) para instruções detalhadas sobre como contribuir com o projeto.
-
----
 
 ## Licença
 

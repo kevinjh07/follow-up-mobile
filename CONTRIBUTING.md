@@ -1,8 +1,6 @@
 # Contributing ao Follow-Up Mobile
 
-Obrigado por querer contribuir com o Follow-Up Mobile! Este documento contém as instruções necessárias para configurar o ambiente e manter a qualidade do código.
-
----
+Este documento contém as instruções necessárias para configurar o ambiente e manter a qualidade do código.
 
 ## Índice
 
@@ -12,8 +10,6 @@ Obrigado por querer contribuir com o Follow-Up Mobile! Este documento contém as
 4. [Padrões de Código](#padrões-de-código)
 5. [Testes](#testes)
 6. [Commits](#commits)
-
----
 
 ## Configuração do Ambiente
 
@@ -72,8 +68,6 @@ O app consome a API do projeto [follow-up-mac](https://github.com/SEU_USUARIO/fo
 2. Execute `npm start` no projeto
 3. Escaneie o QR Code exibido no terminal
 
----
-
 ## Execução do Projeto
 
 ### Comandos Básicos
@@ -113,8 +107,6 @@ npm run typecheck
 ```bash
 npm run lint && npm run typecheck
 ```
-
----
 
 ## Fluxo de Contribuição
 
@@ -182,8 +174,6 @@ No GitHub:
    - Screenshots (se houver mudança visual)
 3. Aguarde a revisão
 
----
-
 ## Padrões de Código
 
 ### Estrutura de Arquivos
@@ -208,12 +198,12 @@ src/features/nome-da-feature/
 Nunca use caminhos relativos (`../../../`). Sempre use aliases:
 
 ```typescript
-// ✅ Correto
+// Correto
 import { api } from '@core/services/api';
 import { useAuthStore } from '@core/stores/authStore';
 import { Button } from '@shared/components';
 
-// ❌ Errado
+// Errado
 import { api } from '../../../core/services/api';
 ```
 
@@ -234,19 +224,19 @@ import { api } from '../../../core/services/api';
 | Estado Local de Tela  | useState       | UI local (modal open, input text)         |
 
 **Proibido:**
-- ❌ `useEffect` para fetch de dados → Use `useQuery`
-- ❌ Props drilling > 2 níveis → Use Zustand
-- ❌ Estado duplicado entre Zustand e useState
+- `useEffect` para fetch de dados → Use `useQuery`
+- Props drilling > 2 níveis → Use Zustand
+- Estado duplicado entre Zustand e useState
 
 ### UI Components
 
 Sempre prefira componentes do **React Native Paper**:
 
 ```typescript
-// ✅ Correto
+// Correto
 import { Button, TextInput, Card } from 'react-native-paper';
 
-// ❌ Errado (só use se absolutamente necessário)
+// Errado (só use se absolutamente necessário)
 import { Button } from 'react-native';
 ```
 
@@ -282,8 +272,6 @@ function MyForm() {
 - Tipos explícitos. **Sem `any`**.
 - Early returns. Máximo **2 níveis de indentação**.
 - Nomes específicos. Evite `data`, `handler`, `Manager`.
-
----
 
 ## Testes
 
@@ -334,8 +322,6 @@ describe('LeadCard', () => {
 });
 ```
 
----
-
 ## Commits
 
 ### Formato
@@ -374,10 +360,6 @@ git commit -m "docs: adiciona instruções de setup no CONTRIBUTING"
 - **Sem linha `Co-Authored-By`**
 - Use verbos no infinitivo: "adiciona", "corrige", "refatora"
 
----
+## Dúvidas
 
-## Dúvidas?
-
-Abra uma [issue](https://github.com/SEU_USUARIO/follow-up-mobile/issues) no repositório ou entre em contato.
-
-Obrigado por contribuir! 🚀
+Abra uma [issue](https://github.com/SEU_USUARIO/follow-up-mobile/issues) no repositório.
