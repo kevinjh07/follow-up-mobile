@@ -26,7 +26,6 @@ function ClinicsScreen() {
   const {
     data: clinics,
     isLoading: _isLoading,
-    error: _error,
     refetch,
     isRefetching,
   } = useQuery({
