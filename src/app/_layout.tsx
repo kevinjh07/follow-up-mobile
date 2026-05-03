@@ -8,11 +8,11 @@ import { theme } from '@core/theme';
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const { user, loadUser } = useAuthStore();
+  const { loadUser } = useAuthStore();
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   return (
     <QueryClientProvider client={queryClient}>

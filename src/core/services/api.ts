@@ -23,7 +23,7 @@ api.interceptors.response.use(
       useAuthStore.getState().logout();
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

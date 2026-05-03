@@ -26,7 +26,7 @@ export function LoginScreen() {
       });
       setUser(response.data.user);
       setToken(response.data.token);
-    } catch (error) {
+    } catch {
       Alert.alert('Erro', 'Falha no login. Verifique suas credenciais.');
     } finally {
       setLoading(false);
