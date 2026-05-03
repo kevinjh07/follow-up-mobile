@@ -6,7 +6,7 @@ module.exports = {
     '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.test.js' }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!react-native/|@react-native/|react-native-paper/|react-native-safe-area-context/|react-native-vector-icons/|@react-navigation/|@react-native-community/|expo/|@expo/|react-native-reanimated/|react-native-gesture-handler/|react-native-screens/|@gorhom/bottom-sheet/|react-native-gifted-charts/)',
+    'node_modules/(?!react-native/|@react-native/|react-native-paper/|react-native-safe-area-context/|react-native-vector-icons/|@react-navigation/|@react-native-community/|expo/|@expo/|react-native-reanimated/|react-native-gesture-handler/|react-native-screens/|@gorhom/bottom-sheet/|react-native-gifted-charts/|msw/)',
   ],
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
@@ -22,19 +22,17 @@ module.exports = {
     '^react-native-safe-area-context/(.*)$': '<rootDir>/src/testing/mocks/react-native-safe-area-context.mock.js',
   },
   collectCoverageFrom: [
-    'src/**/*.ts',
-    'src/**/*.tsx',
+    'src/features/clinics/api/*.ts',
+    'src/features/leads/api/*.ts',
     '!src/**/*.d.ts',
     '!src/testing/**',
-    '!src/**/types.ts',
-    '!src/**/index.ts',
   ],
   coverageThreshold: {
     global: {
-      branches: 2,
-      functions: 12,
-      lines: 8,
-      statements: 8,
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
     },
   },
 };

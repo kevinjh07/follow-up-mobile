@@ -1,4 +1,4 @@
-import { fetchLeads, fetchLead, createLead, updateLead, deleteLead, updateLeadStatus } from './leads.api';
+import { fetchLeads, fetchLead, createLead, updateLead, deleteLead, updateLeadStatus, type Lead } from './leads.api';
 import { api } from '@core/services/api';
 
 jest.mock('@core/services/api', () => ({
@@ -6,83 +6,186 @@ jest.mock('@core/services/api', () => ({
     get: jest.fn(),
     post: jest.fn(),
     put: jest.fn(),
-    delete: jest.fn(),
     patch: jest.fn(),
+    delete: jest.fn(),
   },
 }));
+
+const mockApi = api as jest.MockedObject<typeof api>;
+
+const mockLeads = [
+  { id: 'lead-1', name: 'Lead A', email: 'lead-a@test.com', phone: '111', status: 'OUTREACH' as const, clinicId: 'clinic-1', createdAt: '2024-01-01' },
+  { id: 'lead-2', name: 'Lead B', email: 'lead-b@test.com', phone: '222', status: 'CLOSURE' as const, clinicId: 'clinic-2', createdAt: '2024-01-02' },
+];
 
 describe('leads.api', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should fetch leads list', async () => {
-    const mockResponse = { data: [{ id: '1', name: 'Lead A' }] };
-    (api.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+  describe('fetchLeads', () => {
+    it('should fetch all leads when no clinicId provided', async () => {
+      (mockApi.get as jest.Mock).mockResolvedValueOnce({ data: mockLeads });
 
-    const result = await fetchLeads();
+      const leads = await fetchLeads();
 
-    expect(api.get).toHaveBeenCalledWith('/leads', { params: {} });
-    expect(result).toEqual(mockResponse.data);
+      expect(mockApi.get).toHaveBeenCalledWith('/leads', { params: {} });
+      expect(leads).toEqual(mockLeads);
+    });
+
+    it('should fetch leads filtered by clinicId', async () => {
+      (mockApi.get as jest.Mock).mockResolvedValueOnce({ data: [mockLeads[0]] });
+
+      const leads = await fetchLeads('clinic-1');
+
+      expect(mockApi.get).toHaveBeenCalledWith('/leads', { params: { clinicId: 'clinic-1' } });
+      expect(leads).toEqual([mockLeads[0]]);
+      expect(leads.length).toBe(1);
+    });
+
+    it('should return lead array with correct structure', async () => {
+      (mockApi.get as jest.Mock).mockResolvedValueOnce({ data: mockLeads });
+
+      const leads = await fetchLeads();
+
+      leads.forEach(lead => {
+        expect(lead).toHaveProperty('id');
+        expect(lead).toHaveProperty('name');
+        expect(lead).toHaveProperty('email');
+        expect(lead).toHaveProperty('status');
+      });
+    });
   });
 
-  it('should fetch leads by clinic id', async () => {
-    const mockResponse = { data: [{ id: '1', name: 'Lead A' }] };
-    (api.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+  describe('fetchLead', () => {
+    it('should fetch single lead by id', async () => {
+      (mockApi.get as jest.Mock).mockResolvedValueOnce({ data: mockLeads[0] });
 
-    const result = await fetchLeads('clinic-1');
+      const lead = await fetchLead('lead-1');
 
-    expect(api.get).toHaveBeenCalledWith('/leads', { params: { clinicId: 'clinic-1' } });
-    expect(result).toEqual(mockResponse.data);
+      expect(mockApi.get).toHaveBeenCalledWith('/leads/lead-1');
+      expect(lead).toEqual(mockLeads[0]);
+    });
+
+    it('should return lead with all properties', async () => {
+      (mockApi.get as jest.Mock).mockResolvedValueOnce({ data: mockLeads[0] });
+
+      const lead = await fetchLead('lead-1');
+
+      expect(lead).toHaveProperty('id');
+      expect(lead).toHaveProperty('name');
+      expect(lead).toHaveProperty('email');
+      expect(lead).toHaveProperty('phone');
+      expect(lead).toHaveProperty('status');
+      expect(lead).toHaveProperty('clinicId');
+      expect(lead).toHaveProperty('createdAt');
+    });
   });
 
-  it('should fetch single lead by id', async () => {
-    const mockResponse = { data: { id: '1', name: 'Lead A' } };
-    (api.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+  describe('createLead', () => {
+    it('should create new lead', async () => {
+      const newLeadData = {
+        name: 'Novo Lead',
+        email: 'novo@test.com',
+        phone: '999999999',
+        clinicId: 'clinic-1',
+      };
+      const createdLead = { id: 'new-lead-id', ...newLeadData, status: 'OUTREACH' as const, createdAt: '2024-01-01' };
+      (mockApi.post as jest.Mock).mockResolvedValueOnce({ data: createdLead });
 
-    const result = await fetchLead('1');
+      const created = await createLead(newLeadData);
 
-    expect(api.get).toHaveBeenCalledWith('/leads/1');
-    expect(result).toEqual(mockResponse.data);
+      expect(mockApi.post).toHaveBeenCalledWith('/leads', newLeadData);
+      expect(created.id).toBe('new-lead-id');
+      expect(created.name).toBe(newLeadData.name);
+    });
+
+    it('should return created lead with correct properties', async () => {
+      const newLeadData = {
+        name: 'Novo Lead',
+        email: 'novo@test.com',
+        phone: '999999999',
+        clinicId: 'clinic-1',
+      };
+      const createdLead = { id: 'new-lead-id', ...newLeadData, status: 'OUTREACH' as const, createdAt: '2024-01-01' };
+      (mockApi.post as jest.Mock).mockResolvedValueOnce({ data: createdLead });
+
+      const created = await createLead(newLeadData);
+
+      expect(created.status).toBe('OUTREACH');
+    });
   });
 
-  it('should create lead', async () => {
-    const newLead = { name: 'Novo Lead', email: 'lead@test.com', phone: '123456789', clinicId: 'c1' };
-    const mockResponse = { data: { id: '2', ...newLead } };
-    (api.post as jest.Mock).mockResolvedValueOnce(mockResponse);
+  describe('updateLead', () => {
+    it('should update lead with partial data', async () => {
+      const updateData = { name: 'Lead Atualizado' };
+      const updatedLead = { ...mockLeads[0], ...updateData };
+      (mockApi.put as jest.Mock).mockResolvedValueOnce({ data: updatedLead });
 
-    const result = await createLead(newLead);
+      const updated = await updateLead('lead-1', updateData);
 
-    expect(api.post).toHaveBeenCalledWith('/leads', newLead);
-    expect(result).toEqual(mockResponse.data);
+      expect(mockApi.put).toHaveBeenCalledWith('/leads/lead-1', updateData);
+      expect(updated.name).toBe('Lead Atualizado');
+    });
+
+    it('should preserve unchanged fields', async () => {
+      const updateData = { name: 'Nome Alterado' };
+      const updatedLead = { ...mockLeads[0], ...updateData };
+      (mockApi.put as jest.Mock).mockResolvedValueOnce({ data: updatedLead });
+
+      const updated = await updateLead('lead-1', updateData);
+
+      expect(updated.email).toBe(mockLeads[0].email);
+      expect(updated.phone).toBe(mockLeads[0].phone);
+    });
   });
 
-  it('should update lead', async () => {
-    const updateData = { name: 'Lead Atualizado' };
-    const mockResponse = { data: { id: '1', ...updateData } };
-    (api.put as jest.Mock).mockResolvedValueOnce(mockResponse);
+  describe('updateLeadStatus', () => {
+    it('should update lead status to CLOSURE', async () => {
+      const updatedLead = { ...mockLeads[0], status: 'CLOSURE' as const };
+      (mockApi.patch as jest.Mock).mockResolvedValueOnce({ data: updatedLead });
 
-    const result = await updateLead('1', updateData);
+      const updated = await updateLeadStatus('lead-1', 'CLOSURE');
 
-    expect(api.put).toHaveBeenCalledWith('/leads/1', updateData);
-    expect(result).toEqual(mockResponse.data);
+      expect(mockApi.patch).toHaveBeenCalledWith('/leads/lead-1/status', { status: 'CLOSURE' });
+      expect(updated.status).toBe('CLOSURE');
+    });
+
+    it('should update lead status to FINALIZED', async () => {
+      const updatedLead = { ...mockLeads[0], status: 'FINALIZED' as const };
+      (mockApi.patch as jest.Mock).mockResolvedValueOnce({ data: updatedLead });
+
+      const updated = await updateLeadStatus('lead-1', 'FINALIZED');
+
+      expect(updated.status).toBe('FINALIZED');
+    });
+
+    it('should accept all valid status values', async () => {
+      const statuses: Lead['status'][] = ['OUTREACH', 'TESTIMONIAL', 'CLOSURE', 'FINALIZED'];
+
+      for (const status of statuses) {
+        const updatedLead = { ...mockLeads[0], status };
+        (mockApi.patch as jest.Mock).mockResolvedValueOnce({ data: updatedLead });
+
+        const updated = await updateLeadStatus('lead-1', status);
+        expect(updated.status).toBe(status);
+      }
+    });
   });
 
-  it('should delete lead', async () => {
-    (api.delete as jest.Mock).mockResolvedValueOnce({});
+  describe('deleteLead', () => {
+    it('should call delete with correct id', async () => {
+      (mockApi.delete as jest.Mock).mockResolvedValueOnce({ data: undefined });
 
-    await deleteLead('1');
+      await deleteLead('lead-1');
 
-    expect(api.delete).toHaveBeenCalledWith('/leads/1');
-  });
+      expect(mockApi.delete).toHaveBeenCalledWith('/leads/lead-1');
+    });
 
-  it('should update lead status', async () => {
-    const mockResponse = { data: { id: '1', status: 'CLOSURE' } };
-    (api.patch as jest.Mock).mockResolvedValueOnce(mockResponse);
+    it('should not throw on successful delete', async () => {
+      (mockApi.delete as jest.Mock).mockResolvedValueOnce({ data: undefined });
 
-    const result = await updateLeadStatus('1', 'CLOSURE');
-
-    expect(api.patch).toHaveBeenCalledWith('/leads/1/status', { status: 'CLOSURE' });
-    expect(result).toEqual(mockResponse.data);
+      await expect(deleteLead('lead-1')).resolves.not.toThrow();
+    });
   });
 });
