@@ -6,7 +6,17 @@ module.exports = {
   Button: 'Button',
   Image: 'Image',
   ScrollView: 'ScrollView',
-  FlatList: 'FlatList',
+  FlatList: ({ data, renderItem, keyExtractor, testID, refreshControl, contentContainerStyle, style }) => {
+    const items = data || [];
+    return {
+      type: 'FlatList',
+      props: { testID, refreshControl },
+      children: items.map((item, index) => {
+        const RenderItem = renderItem;
+        return RenderItem ? RenderItem({ item, index }) : null;
+      }),
+    };
+  },
   SectionList: 'SectionList',
   TouchableOpacity: 'TouchableOpacity',
   TouchableWithoutFeedback: 'TouchableWithoutFeedback',
