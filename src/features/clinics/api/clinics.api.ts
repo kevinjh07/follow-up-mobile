@@ -1,16 +1,7 @@
 import { api } from '@core/services/api';
-import type { ConnectionStatus } from './whatsapp.api';
+import type { Clinic, NewClinic } from '../types';
 
-export interface Clinic {
-  id: string;
-  name: string;
-  cnpj: string;
-  whatsappStatus: ConnectionStatus;
-  leadsCount: number;
-  createdAt: string;
-}
-
-export type NewClinic = Pick<Clinic, 'name' | 'cnpj'>;
+export type { Clinic, NewClinic } from '../types';
 
 export async function fetchClinics(): Promise<Clinic[]> {
   const response = await api.get('/clinics');

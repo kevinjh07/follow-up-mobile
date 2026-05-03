@@ -1,16 +1,7 @@
 import { api } from '@core/services/api';
+import type { Lead, NewLead } from '../types';
 
-export interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  status: 'OUTREACH' | 'TESTIMONIAL' | 'CLOSURE' | 'FINALIZED';
-  clinicId: string;
-  createdAt: string;
-}
-
-export type NewLead = Pick<Lead, 'name' | 'email' | 'phone' | 'clinicId'>;
+export type { Lead, NewLead } from '../types';
 
 export async function fetchLeads(clinicId?: string): Promise<Lead[]> {
   const params = clinicId ? { clinicId } : {};

@@ -1,24 +1,7 @@
 import { api } from '@core/services/api';
+import type { User, NewUser, UserRole, UserStatus } from '../types';
 
-export type UserRole = 'ADMIN' | 'ATTENDANT' | 'OPS';
-export type UserStatus = 'PENDING' | 'ACTIVE' | 'INACTIVE';
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-  status: UserStatus;
-  clinicId?: string;
-  createdAt: string;
-}
-
-export interface NewUser {
-  email: string;
-  name: string;
-  role: UserRole;
-  clinicId?: string;
-}
+export type { User, NewUser, UserRole, UserStatus } from '../types';
 
 export async function fetchUsers(): Promise<User[]> {
   const response = await api.get('/users');
