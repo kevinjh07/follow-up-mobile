@@ -6,6 +6,7 @@ export type RootStackParamList = {
   ActivateAccount: { token?: string };
   ChangePassword: undefined;
   Users: undefined;
+  Privacy: undefined;
 };
 
 export type AuthStackParamList = {

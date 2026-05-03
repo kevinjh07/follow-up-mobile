@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Text, Button, Appbar, Card, Title, Paragraph, Chip } from 'react-native-paper';
+import { Text, Button, Appbar, Card, Title, Paragraph, Chip, Divider } from 'react-native-paper';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchLead, updateLeadStatus, deleteLead } from '@features/leads/api/leads.api';
+import { fetchLead, updateLeadStatus, deleteLead, optOutLead, anonymizeLead } from '@features/leads/api/leads.api';
 import { useLeadStore } from '@features/leads/stores/leadStore';
+import { useAuthStore } from '@core/stores/authStore';
 import type { Lead } from '@features/leads/api/leads.api';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -28,7 +29,9 @@ const STATUS_COLORS: Record<Lead['status'], string> = {
 function LeadDetailScreen() {
   const navigation = useNavigation<NavigationProp>();
   const { selectedLead, setSelectedLead } = useLeadStore();
+  const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const isAdmin = user?.role === 'ADMIN';
 
   const { data: lead, isLoading, error } = useQuery({
     queryKey: ['lead', selectedLead?.id],
@@ -53,6 +56,46 @@ function LeadDetailScreen() {
       navigation.goBack();
     },
   });
+
+  const optOutMutation = useMutation({
+    mutationFn: () => optOutLead(selectedLead!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['lead', selectedLead?.id] });
+      Alert.alert('Sucesso', 'Lead marcado como opt-out');
+    },
+  });
+
+  const anonymizeMutation = useMutation({
+    mutationFn: () => anonymizeLead(selectedLead!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      setSelectedLead(null);
+      navigation.goBack();
+    },
+  });
+
+  const handleOptOut = () => {
+    Alert.alert(
+      'Opt-out',
+      `Registrar opt-out para "${lead?.name}"? Este lead não receberá mais mensagens.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Confirmar', onPress: () => optOutMutation.mutate() },
+      ]
+    );
+  };
+
+  const handleAnonymize = () => {
+    Alert.alert(
+      'Anonimizar',
+      `Anonimizar os dados de "${lead?.name}"? Esta ação não pode ser desfeita.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Anonimizar', style: 'destructive', onPress: () => anonymizeMutation.mutate() },
+      ]
+    );
+  };
 
   if (isLoading) {
     return <View style={styles.center}><Text>Carregando...</Text></View>;
@@ -86,6 +129,7 @@ function LeadDetailScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Title>Informações</Title>
+            <Divider style={styles.divider} />
             <Paragraph>E-mail: {lead.email}</Paragraph>
             <Paragraph>Telefone: {lead.phone}</Paragraph>
             <View style={styles.statusRow}>
@@ -97,6 +141,34 @@ function LeadDetailScreen() {
                 {STATUS_LABELS[lead.status]}
               </Chip>
             </View>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.card}>
+          <Card.Content>
+            <Title>Privacidade (LGPD)</Title>
+            <Divider style={styles.divider} />
+            <Button
+              mode="outlined"
+              onPress={handleOptOut}
+              loading={optOutMutation.isPending}
+              disabled={optOutMutation.isPending}
+              style={styles.privacyButton}
+            >
+              Registrar Opt-out
+            </Button>
+            {isAdmin && (
+              <Button
+                mode="outlined"
+                onPress={handleAnonymize}
+                loading={anonymizeMutation.isPending}
+                disabled={anonymizeMutation.isPending}
+                style={styles.privacyButton}
+                textColor="#b00020"
+              >
+                Anonimizar Dados
+              </Button>
+            )}
           </Card.Content>
         </Card>
 
@@ -137,6 +209,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   content: { flex: 1, padding: 16 },
   card: { marginBottom: 16 },
+  divider: { marginVertical: 12 },
   statusRow: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
   label: { fontSize: 14, marginRight: 8 },
   chip: { height: 28 },
@@ -146,6 +219,7 @@ const styles = StyleSheet.create({
   statusButton: { marginBottom: 4 },
   deleteButton: { marginTop: 24, borderColor: '#b00020' },
   error: { color: '#b00020', textAlign: 'center', marginBottom: 16 },
+  privacyButton: { marginTop: 8 },
 });
 
 export { LeadDetailScreen };

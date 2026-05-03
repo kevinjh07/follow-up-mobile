@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button, Text, Title, HelperText } from 'react-native-paper';
+import { TextInput, Button, Title, HelperText } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';

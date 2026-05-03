@@ -25,6 +25,10 @@ export function ProfileScreen() {
     navigation.navigate('Users');
   }
 
+  function handlePrivacy() {
+    navigation.navigate('Privacy');
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.header}>
@@ -46,6 +50,11 @@ export function ProfileScreen() {
             onPress={handleManageUsers}
           />
         )}
+        <List.Item
+          title="Privacidade"
+          left={(props) => <List.Icon {...props} icon="shield-account" />}
+          onPress={handlePrivacy}
+        />
         <List.Item title="Sobre" left={(props) => <List.Icon {...props} icon="information" />} />
       </List.Section>
 

@@ -8,6 +8,7 @@ import { ResetPasswordScreen } from '@features/auth/screens/ResetPasswordScreen'
 import { ActivateAccountScreen } from '@features/auth/screens/ActivateAccountScreen';
 import { ChangePasswordScreen } from '@features/users/screens/ChangePasswordScreen';
 import { UsersScreen } from '@features/users/screens/UsersScreen';
+import { PrivacyScreen } from '@features/privacy/screens/PrivacyScreen';
 import { MainTabs } from './MainTabs';
 import { navigationRef } from './navigationRef';
 import type { RootStackParamList } from '@navigation/types';
@@ -45,6 +46,11 @@ function RootNavigator() {
             name="Users"
             component={UsersScreen}
             options={{ title: 'Usuários', headerShown: true }}
+          />
+          <Stack.Screen
+            name="Privacy"
+            component={PrivacyScreen}
+            options={{ title: 'Privacidade', headerShown: true }}
           />
         </Stack.Navigator>
       </AuthGate>

@@ -41,3 +41,12 @@ export async function updateLeadStatus(id: string, status: Lead['status']): Prom
   const response = await api.patch(`/leads/${id}/status`, { status });
   return response.data;
 }
+
+export async function optOutLead(id: string): Promise<Lead> {
+  const response = await api.patch(`/leads/${id}/opt-out`);
+  return response.data;
+}
+
+export async function anonymizeLead(id: string): Promise<void> {
+  await api.delete(`/leads/${id}`);
+}
