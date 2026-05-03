@@ -515,5 +515,4 @@ const theme = useTheme();
 
 ## Referências
 
-- Baseado nas convenções de código do projeto `18mc-mobile`
-- Repo da API Follow-Up: `/home/kevin/Git/follow-up-mac`
+- Repo da API Follow-Up: `follow-up-mac` (monorepo com API em apps/api/)
