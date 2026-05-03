@@ -21,4 +21,7 @@ export type MainTabsParamList = {
   LeadDetail: undefined;
   LeadForm: undefined;
   Profile: undefined;
+  QRCodeDialog: { clinicId: string };
+  PairingCodeDialog: { clinicId: string };
+  WhatsAppSettings: { clinicId: string };
 };

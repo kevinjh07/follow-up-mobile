@@ -1,10 +1,11 @@
 import { api } from '@core/services/api';
+import type { ConnectionStatus } from './whatsapp.api';
 
 export interface Clinic {
   id: string;
   name: string;
   cnpj: string;
-  whatsappStatus: 'disconnected' | 'connecting' | 'connected';
+  whatsappStatus: ConnectionStatus;
   leadsCount: number;
   createdAt: string;
 }

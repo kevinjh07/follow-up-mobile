@@ -107,7 +107,7 @@ describe('navigation logic', () => {
   });
 
   it('should navigate to Login after successful reset', () => {
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = jest.spyOn(globalThis, 'setTimeout');
     expect(setTimeoutSpy).not.toHaveBeenCalled();
   });
 });

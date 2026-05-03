@@ -11,9 +11,10 @@ import type { MainTabsParamList } from '@navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<MainTabsParamList, 'Clinics'>;
 
-const WHATSAPP_STATUS_COLORS = {
+const WHATSAPP_STATUS_COLORS: Record<string, string> = {
   disconnected: '#999',
-  connecting: '#f0a500',
+  qr_pending: '#f0a500',
+  code_pending: '#2196f3',
   connected: '#4caf50',
 };
 
