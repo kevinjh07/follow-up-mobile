@@ -7,6 +7,7 @@ import { ProfileScreen } from '@features/profile/ProfileScreen';
 export type MainTabsParamList = {
   Leads: undefined;
   Clinics: undefined;
+  ClinicDetail: undefined;
   Profile: undefined;
 };
 

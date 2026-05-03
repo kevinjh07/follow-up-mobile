@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { Text, Card, List, FAB, useTheme } from 'react-native-paper';
+import { Text, Card, List, FAB } from 'react-native-paper';
 import { useQuery } from '@tanstack/react-query';
 import { fetchClinics } from '@features/clinics/api/clinics.api';
 import { useClinicStore } from '@features/clinics/stores/clinicStore';
 import type { Clinic } from '@features/clinics/api/clinics.api';
 
 function ClinicsScreen() {
-  const theme = useTheme();
   const setActiveClinic = useClinicStore((s) => s.setActiveClinic);
 
   const {
