@@ -9,6 +9,7 @@ import { ClinicsScreen } from '@features/clinics/screens/ClinicsScreen';
 import { ClinicDetailScreen } from '@features/clinics/screens/ClinicDetailScreen';
 import { ClinicFormScreen } from '@features/clinics/screens/ClinicFormScreen';
 import { ProfileScreen } from '@features/profile/ProfileScreen';
+import { DashboardScreen } from '@features/dashboard/screens/DashboardScreen';
 import { DispatchConfirmScreen } from '@features/dispatch/screens/DispatchConfirmScreen';
 import { DispatchProgressScreen } from '@features/dispatch/screens/DispatchProgressScreen';
 import type { MainTabsParamList } from '@navigation/types';
@@ -78,6 +79,16 @@ export function MainTabs() {
           title: 'Clínicas',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="hospital-building" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="view-dashboard" size={size} color={color} />
           ),
         }}
       />

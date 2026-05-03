@@ -7,6 +7,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   Users: undefined;
   Privacy: undefined;
+  Dashboard: undefined;
 };
 
 export type AuthStackParamList = {
@@ -19,6 +20,7 @@ export type AuthStackParamList = {
 export type MainTabsParamList = {
   Clinics: undefined;
   Leads: undefined;
+  Dashboard: undefined;
   ClinicDetail: undefined;
   ClinicForm: undefined;
   LeadDetail: undefined;
