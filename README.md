@@ -27,6 +27,21 @@ O app permite que atendentes e administradores gerenciem leads cadastrados por c
 | HTTP          | Axios + interceptors                     |
 | Armazenamento | Expo Secure Store (tokens)               |
 | Gráficos      | React Native Gifted Charts               |
+| Notificações  | Expo Notifications + Expo Device       |
+
+## Funcionalidades
+
+| Módulo        | Descrição                                              |
+| ------------- | ------------------------------------------------------ |
+| **Auth**      | Login, recuperação de senha, ativação de conta       |
+| **Clinics**   | CRUD de clínicas, status WhatsApp                    |
+| **Leads**     | CRUD de leads, busca, filtros por status              |
+| **Dispatch**  | Seleção múltipla, confirmação e progresso de disparo   |
+| **WhatsApp**  | QR Code pairing, envio de mensagens                   |
+| **Users**     | Gerenciamento de usuários (ADMIN)                      |
+| **Privacy**   | LGPD: exportação, opt-out, anonimização                |
+| **Dashboard** | KPIs, funil de leads, sessões de dispatch            |
+| **Profile**   | Alteração de senha, dados do usuário                   |
 
 ## Pré-requisitos
 
@@ -122,12 +137,15 @@ npm run lint && npm run typecheck
 src/
   app/        — entry point, providers, estilos globais
   core/
-    services/ — API clients (auth, clinics, leads, etc.)
+    services/ — API clients (auth, clinics, leads, notifications)
     types/    — interfaces e modelos TypeScript
     utils/    — funções auxiliares
     stores/   — Zustand stores (auth, tema, etc.)
-  features/   — módulos por domínio (cada feature tem screens/, api/, hooks/)
-  shared/     — componentes reutilizáveis, hooks, constantes
+    hooks/    — hooks globais (useNotifications)
+  features/   — módulos por domínio (screens/, api/, hooks/, stores/, types.ts)
+  shared/
+    components/ — componentes reutilizáveis (EmptyState, SnackbarProvider)
+    components/ — hooks e constantes
   navigation/ — configuração de rotas (Stack, Tabs, Drawer)
 ```
 
