@@ -14,13 +14,15 @@ import { AuthStackParamList } from '@navigation/types';
 type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'ActivateAccount'>;
 type ActivateRouteProp = RouteProp<AuthStackParamList, 'ActivateAccount'>;
 
-const activateSchema = z.object({
-  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
-  confirmPassword: z.string().min(6, 'Confirme a senha'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'As senhas não coincidem',
-  path: ['confirmPassword'],
-});
+const activateSchema = z
+  .object({
+    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+    confirmPassword: z.string().min(6, 'Confirme a senha'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  });
 
 type ActivateFormData = z.infer<typeof activateSchema>;
 
@@ -65,9 +67,7 @@ export function ActivateAccountScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.container}>
             <Title style={styles.title}>Ativar conta</Title>
-            <Text style={styles.subtitle}>
-              Crie uma senha para ativar sua conta.
-            </Text>
+            <Text style={styles.subtitle}>Crie uma senha para ativar sua conta.</Text>
 
             <Controller
               control={control}
@@ -84,9 +84,7 @@ export function ActivateAccountScreen() {
                     style={styles.input}
                     mode="outlined"
                   />
-                  {fieldError && (
-                    <HelperText type="error">{fieldError.message}</HelperText>
-                  )}
+                  {fieldError && <HelperText type="error">{fieldError.message}</HelperText>}
                 </View>
               )}
             />
@@ -106,9 +104,7 @@ export function ActivateAccountScreen() {
                     style={styles.input}
                     mode="outlined"
                   />
-                  {fieldError && (
-                    <HelperText type="error">{fieldError.message}</HelperText>
-                  )}
+                  {fieldError && <HelperText type="error">{fieldError.message}</HelperText>}
                 </View>
               )}
             />

@@ -32,7 +32,11 @@ export function UsersScreen() {
   const [showUserForm, setShowUserForm] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
-  const { data: users, refetch, isRefetching } = useQuery({
+  const {
+    data: users,
+    refetch,
+    isRefetching,
+  } = useQuery({
     queryKey: ['users'],
     queryFn: fetchUsers,
   });
@@ -55,8 +59,7 @@ export function UsersScreen() {
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesRole =
-        selectedRoles.length === 0 || selectedRoles.includes(user.role);
+      const matchesRole = selectedRoles.length === 0 || selectedRoles.includes(user.role);
 
       return matchesSearch && matchesRole;
     });
@@ -64,7 +67,7 @@ export function UsersScreen() {
 
   const toggleRole = (role: UserRole) => {
     setSelectedRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
+      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role],
     );
   };
 
@@ -79,14 +82,10 @@ export function UsersScreen() {
   };
 
   const handleDeleteUser = (user: User) => {
-    Alert.alert(
-      'Excluir Usuário',
-      `Tem certeza que deseja excluir "${user.name}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Excluir', style: 'destructive', onPress: () => deleteMutation.mutate(user.id) },
-      ]
-    );
+    Alert.alert('Excluir Usuário', `Tem certeza que deseja excluir "${user.name}"?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Excluir', style: 'destructive', onPress: () => deleteMutation.mutate(user.id) },
+    ]);
   };
 
   const renderItem = ({ item }: { item: User }) => (
@@ -158,7 +157,9 @@ export function UsersScreen() {
                 selectedRoles.includes(item) && { backgroundColor: ROLE_COLORS[item] },
               ]}
               textStyle={
-                selectedRoles.includes(item) ? styles.chipTextSelected : { color: ROLE_COLORS[item] }
+                selectedRoles.includes(item)
+                  ? styles.chipTextSelected
+                  : { color: ROLE_COLORS[item] }
               }
             >
               {ROLE_LABELS[item]}

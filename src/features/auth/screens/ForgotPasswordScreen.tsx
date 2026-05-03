@@ -41,11 +41,7 @@ export function ForgotPasswordScreen() {
           <Text style={styles.message}>
             Enviamos um link de recuperação para seu e-mail. Verifique sua caixa de entrada.
           </Text>
-          <Button
-            mode="contained"
-            onPress={() => navigation.goBack()}
-            style={styles.button}
-          >
+          <Button mode="contained" onPress={() => navigation.goBack()} style={styles.button}>
             Voltar ao login
           </Button>
         </View>
@@ -81,9 +77,7 @@ export function ForgotPasswordScreen() {
                     style={styles.input}
                     mode="outlined"
                   />
-                  {fieldError && (
-                    <HelperText type="error">{fieldError.message}</HelperText>
-                  )}
+                  {fieldError && <HelperText type="error">{fieldError.message}</HelperText>}
                 </View>
               )}
             />
@@ -104,11 +98,7 @@ export function ForgotPasswordScreen() {
               Enviar link
             </Button>
 
-            <Button
-              mode="text"
-              onPress={() => navigation.goBack()}
-              style={styles.backButton}
-            >
+            <Button mode="text" onPress={() => navigation.goBack()} style={styles.backButton}>
               Voltar ao login
             </Button>
           </View>

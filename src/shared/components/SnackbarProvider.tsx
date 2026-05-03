@@ -33,14 +33,16 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
     setVisible(true);
   }, []);
 
-  const showSuccess = useCallback((message: string) => showMessage(message, 'success'), [showMessage]);
+  const showSuccess = useCallback(
+    (message: string) => showMessage(message, 'success'),
+    [showMessage],
+  );
   const showError = useCallback((message: string) => showMessage(message, 'error'), [showMessage]);
   const showInfo = useCallback((message: string) => showMessage(message, 'info'), [showMessage]);
 
   const onDismiss = useCallback(() => setVisible(false), []);
 
-  const backgroundColor =
-    type === 'success' ? '#4caf50' : type === 'error' ? '#b00020' : '#2196f3';
+  const backgroundColor = type === 'success' ? '#4caf50' : type === 'error' ? '#b00020' : '#2196f3';
 
   return (
     <SnackbarContext.Provider value={{ showSuccess, showError, showInfo }}>

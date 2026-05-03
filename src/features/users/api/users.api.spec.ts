@@ -1,16 +1,20 @@
 import { z } from 'zod';
 
 describe('Change password validation', () => {
-  const changePasswordSchema = z.object({
-    currentPassword: z.string().min(1, 'Senha atual é obrigatória'),
-    newPassword: z.string().min(8, 'Nova senha deve ter pelo menos 8 caracteres')
-      .regex(/[A-Z]/, 'Nova senha deve ter pelo menos 1 letra maiúscula')
-      .regex(/[0-9]/, 'Nova senha deve ter pelo menos 1 número'),
-    confirmPassword: z.string().min(1, 'Confirme a nova senha'),
-  }).refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'As senhas não coincidem',
-    path: ['confirmPassword'],
-  });
+  const changePasswordSchema = z
+    .object({
+      currentPassword: z.string().min(1, 'Senha atual é obrigatória'),
+      newPassword: z
+        .string()
+        .min(8, 'Nova senha deve ter pelo menos 8 caracteres')
+        .regex(/[A-Z]/, 'Nova senha deve ter pelo menos 1 letra maiúscula')
+        .regex(/[0-9]/, 'Nova senha deve ter pelo menos 1 número'),
+      confirmPassword: z.string().min(1, 'Confirme a nova senha'),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: 'As senhas não coincidem',
+      path: ['confirmPassword'],
+    });
 
   it('should accept valid password change data', () => {
     const result = changePasswordSchema.safeParse({

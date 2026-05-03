@@ -17,7 +17,11 @@ export function QRCodeDialog({ visible, onDismiss }: QRCodeDialogProps) {
   const route = useRoute<QRCodeRouteProp>();
   const { clinicId } = route.params;
 
-  const { data: qrCode, isLoading, error } = useQuery({
+  const {
+    data: qrCode,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['whatsapp-qr', clinicId],
     queryFn: () => fetchWhatsAppQRCode(clinicId),
     enabled: visible,
@@ -45,14 +49,8 @@ export function QRCodeDialog({ visible, onDismiss }: QRCodeDialogProps) {
           )}
           {qrCode && (
             <View style={styles.qrContainer}>
-              <Image
-                source={{ uri: qrCode }}
-                style={styles.qrImage}
-                resizeMode="contain"
-              />
-              <Text style={styles.instruction}>
-                Escaneie o QR Code com seu WhatsApp
-              </Text>
+              <Image source={{ uri: qrCode }} style={styles.qrImage} resizeMode="contain" />
+              <Text style={styles.instruction}>Escaneie o QR Code com seu WhatsApp</Text>
               <Text style={styles.timeout}>O código expira em 60 segundos</Text>
             </View>
           )}

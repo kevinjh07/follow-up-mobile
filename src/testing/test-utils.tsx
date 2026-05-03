@@ -40,7 +40,7 @@ export interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper
 
 export function renderWithProviders(
   ui: React.ReactElement,
-  { queryClient = createQueryClient(), ...renderOptions }: RenderWithProvidersOptions = {}
+  { queryClient = createQueryClient(), ...renderOptions }: RenderWithProvidersOptions = {},
 ) {
   const Wrapper = createWrapper(queryClient);
 

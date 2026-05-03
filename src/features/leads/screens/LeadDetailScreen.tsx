@@ -2,7 +2,13 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Text, Button, Appbar, Card, Title, Paragraph, Chip, Divider } from 'react-native-paper';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchLead, updateLeadStatus, deleteLead, optOutLead, anonymizeLead } from '@features/leads/api/leads.api';
+import {
+  fetchLead,
+  updateLeadStatus,
+  deleteLead,
+  optOutLead,
+  anonymizeLead,
+} from '@features/leads/api/leads.api';
 import { useLeadStore } from '@features/leads/stores/leadStore';
 import { useAuthStore } from '@core/stores/authStore';
 import type { Lead } from '@features/leads/api/leads.api';
@@ -33,7 +39,11 @@ function LeadDetailScreen() {
   const queryClient = useQueryClient();
   const isAdmin = user?.role === 'ADMIN';
 
-  const { data: lead, isLoading, error } = useQuery({
+  const {
+    data: lead,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['lead', selectedLead?.id],
     queryFn: () => fetchLead(selectedLead!.id),
     enabled: !!selectedLead?.id,
@@ -82,7 +92,7 @@ function LeadDetailScreen() {
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: 'Confirmar', onPress: () => optOutMutation.mutate() },
-      ]
+      ],
     );
   };
 
@@ -93,12 +103,16 @@ function LeadDetailScreen() {
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: 'Anonimizar', style: 'destructive', onPress: () => anonymizeMutation.mutate() },
-      ]
+      ],
     );
   };
 
   if (isLoading) {
-    return <View style={styles.center}><Text>Carregando...</Text></View>;
+    return (
+      <View style={styles.center}>
+        <Text>Carregando...</Text>
+      </View>
+    );
   }
 
   if (error || !lead) {
@@ -113,10 +127,13 @@ function LeadDetailScreen() {
   return (
     <View style={styles.flex}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => {
-          setSelectedLead(null);
-          navigation.goBack();
-        }} accessibilityLabel="Voltar" />
+        <Appbar.BackAction
+          onPress={() => {
+            setSelectedLead(null);
+            navigation.goBack();
+          }}
+          accessibilityLabel="Voltar"
+        />
         <Appbar.Content title={lead.name} />
         <Appbar.Action
           icon="pencil"

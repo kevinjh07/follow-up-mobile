@@ -39,8 +39,7 @@ export function LeadsScreen() {
         lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lead.phone.includes(searchQuery);
 
-      const matchesStatus =
-        selectedStatuses.length === 0 || selectedStatuses.includes(lead.status);
+      const matchesStatus = selectedStatuses.length === 0 || selectedStatuses.includes(lead.status);
 
       return matchesSearch && matchesStatus;
     });
@@ -48,7 +47,7 @@ export function LeadsScreen() {
 
   const handleToggleStatus = (status: string) => {
     setSelectedStatuses((prev) =>
-      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
+      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status],
     );
   };
 

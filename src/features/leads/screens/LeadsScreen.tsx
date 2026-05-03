@@ -56,8 +56,7 @@ function LeadsScreen() {
         lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lead.phone.includes(searchQuery);
 
-      const matchesStatus =
-        selectedStatuses.length === 0 || selectedStatuses.includes(lead.status);
+      const matchesStatus = selectedStatuses.length === 0 || selectedStatuses.includes(lead.status);
 
       return matchesSearch && matchesStatus;
     });
@@ -67,7 +66,7 @@ function LeadsScreen() {
 
   const toggleStatus = (status: string) => {
     setSelectedStatuses((prev) =>
-      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
+      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status],
     );
   };
 
@@ -87,10 +86,7 @@ function LeadsScreen() {
         <View style={styles.cardHeader}>
           <Text style={styles.name}>{item.name}</Text>
           <View
-            style={[
-              styles.statusBadge,
-              { backgroundColor: STATUS_COLORS[item.status] || '#999' },
-            ]}
+            style={[styles.statusBadge, { backgroundColor: STATUS_COLORS[item.status] || '#999' }]}
           >
             <Text style={styles.statusText}>{STATUS_LABELS[item.status] || item.status}</Text>
           </View>

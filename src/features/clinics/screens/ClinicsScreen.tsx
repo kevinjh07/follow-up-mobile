@@ -29,11 +29,7 @@ function ClinicsScreen() {
     if (!clinics) return [];
     if (!searchQuery.trim()) return clinics;
     const query = searchQuery.toLowerCase();
-    return clinics.filter(
-      (c) =>
-        c.name.toLowerCase().includes(query) ||
-        c.cnpj.includes(query)
-    );
+    return clinics.filter((c) => c.name.toLowerCase().includes(query) || c.cnpj.includes(query));
   }, [clinics, searchQuery]);
 
   const handleClinicPress = (clinic: Clinic) => {

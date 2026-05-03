@@ -1,5 +1,3 @@
-import { api } from '@core/services/api';
-
 describe('WhatsApp API', () => {
   const mockClinicId = 'clinic-123';
 
@@ -57,13 +55,11 @@ describe('WhatsApp status flow', () => {
   });
 
   it('should transition from qr_pending to connected', () => {
-    const currentStatus = 'qr_pending';
     const expectedNextStatus = 'connected';
     expect(expectedNextStatus).toBe('connected');
   });
 
   it('should handle disconnection back to disconnected', () => {
-    const currentStatus = 'connected';
     const disconnectedStatus = 'disconnected';
     expect(disconnectedStatus).toBe('disconnected');
   });

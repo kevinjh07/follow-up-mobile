@@ -14,13 +14,15 @@ import { AuthStackParamList } from '@navigation/types';
 type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'ResetPassword'>;
 type ResetRouteProp = RouteProp<AuthStackParamList, 'ResetPassword'>;
 
-const resetSchema = z.object({
-  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
-  confirmPassword: z.string().min(6, 'Confirme a senha'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'As senhas não coincidem',
-  path: ['confirmPassword'],
-});
+const resetSchema = z
+  .object({
+    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+    confirmPassword: z.string().min(6, 'Confirme a senha'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  });
 
 type ResetFormData = z.infer<typeof resetSchema>;
 
@@ -66,9 +68,7 @@ export function ResetPasswordScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.container}>
             <Title style={styles.title}>Nova senha</Title>
-            <Text style={styles.subtitle}>
-              Informe sua nova senha.
-            </Text>
+            <Text style={styles.subtitle}>Informe sua nova senha.</Text>
 
             <Controller
               control={control}
@@ -85,9 +85,7 @@ export function ResetPasswordScreen() {
                     style={styles.input}
                     mode="outlined"
                   />
-                  {fieldError && (
-                    <HelperText type="error">{fieldError.message}</HelperText>
-                  )}
+                  {fieldError && <HelperText type="error">{fieldError.message}</HelperText>}
                 </View>
               )}
             />
@@ -107,9 +105,7 @@ export function ResetPasswordScreen() {
                     style={styles.input}
                     mode="outlined"
                   />
-                  {fieldError && (
-                    <HelperText type="error">{fieldError.message}</HelperText>
-                  )}
+                  {fieldError && <HelperText type="error">{fieldError.message}</HelperText>}
                 </View>
               )}
             />

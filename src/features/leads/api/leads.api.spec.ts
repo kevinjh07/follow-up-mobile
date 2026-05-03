@@ -1,4 +1,12 @@
-import { fetchLeads, fetchLead, createLead, updateLead, deleteLead, updateLeadStatus, type Lead } from './leads.api';
+import {
+  fetchLeads,
+  fetchLead,
+  createLead,
+  updateLead,
+  deleteLead,
+  updateLeadStatus,
+  type Lead,
+} from './leads.api';
 import { api } from '@core/services/api';
 
 jest.mock('@core/services/api', () => ({
@@ -14,8 +22,24 @@ jest.mock('@core/services/api', () => ({
 const mockApi = api as jest.MockedObject<typeof api>;
 
 const mockLeads = [
-  { id: 'lead-1', name: 'Lead A', email: 'lead-a@test.com', phone: '111', status: 'OUTREACH' as const, clinicId: 'clinic-1', createdAt: '2024-01-01' },
-  { id: 'lead-2', name: 'Lead B', email: 'lead-b@test.com', phone: '222', status: 'CLOSURE' as const, clinicId: 'clinic-2', createdAt: '2024-01-02' },
+  {
+    id: 'lead-1',
+    name: 'Lead A',
+    email: 'lead-a@test.com',
+    phone: '111',
+    status: 'OUTREACH' as const,
+    clinicId: 'clinic-1',
+    createdAt: '2024-01-01',
+  },
+  {
+    id: 'lead-2',
+    name: 'Lead B',
+    email: 'lead-b@test.com',
+    phone: '222',
+    status: 'CLOSURE' as const,
+    clinicId: 'clinic-2',
+    createdAt: '2024-01-02',
+  },
 ];
 
 describe('leads.api', () => {
@@ -48,7 +72,7 @@ describe('leads.api', () => {
 
       const leads = await fetchLeads();
 
-      leads.forEach(lead => {
+      leads.forEach((lead) => {
         expect(lead).toHaveProperty('id');
         expect(lead).toHaveProperty('name');
         expect(lead).toHaveProperty('email');
@@ -90,7 +114,12 @@ describe('leads.api', () => {
         phone: '999999999',
         clinicId: 'clinic-1',
       };
-      const createdLead = { id: 'new-lead-id', ...newLeadData, status: 'OUTREACH' as const, createdAt: '2024-01-01' };
+      const createdLead = {
+        id: 'new-lead-id',
+        ...newLeadData,
+        status: 'OUTREACH' as const,
+        createdAt: '2024-01-01',
+      };
       (mockApi.post as jest.Mock).mockResolvedValueOnce({ data: createdLead });
 
       const created = await createLead(newLeadData);
@@ -107,7 +136,12 @@ describe('leads.api', () => {
         phone: '999999999',
         clinicId: 'clinic-1',
       };
-      const createdLead = { id: 'new-lead-id', ...newLeadData, status: 'OUTREACH' as const, createdAt: '2024-01-01' };
+      const createdLead = {
+        id: 'new-lead-id',
+        ...newLeadData,
+        status: 'OUTREACH' as const,
+        createdAt: '2024-01-01',
+      };
       (mockApi.post as jest.Mock).mockResolvedValueOnce({ data: createdLead });
 
       const created = await createLead(newLeadData);

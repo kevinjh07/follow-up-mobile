@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Text, Button, Appbar, Card, Title, Paragraph, Divider, ActivityIndicator, Portal } from 'react-native-paper';
+import {
+  Text,
+  Button,
+  Appbar,
+  Card,
+  Title,
+  Paragraph,
+  Divider,
+  ActivityIndicator,
+  Portal,
+} from 'react-native-paper';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchClinic, deleteClinic, exportClinicLeads } from '@features/clinics/api/clinics.api';
-import { fetchWhatsAppStatus, startWhatsAppInstance, disconnectWhatsApp, ConnectionStatus } from '@features/clinics/api/whatsapp.api';
+import {
+  fetchWhatsAppStatus,
+  startWhatsAppInstance,
+  disconnectWhatsApp,
+  ConnectionStatus,
+} from '@features/clinics/api/whatsapp.api';
 import { useClinicStore } from '@features/clinics/stores/clinicStore';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -34,7 +49,11 @@ function ClinicDetailScreen() {
   const [showQRCode, setShowQRCode] = useState(false);
   const [showPairingCode, setShowPairingCode] = useState(false);
 
-  const { data: clinic, isLoading: clinicLoading, error: clinicError } = useQuery({
+  const {
+    data: clinic,
+    isLoading: clinicLoading,
+    error: clinicError,
+  } = useQuery({
     queryKey: ['clinic', activeClinic?.id],
     queryFn: () => fetchClinic(activeClinic!.id),
     enabled: !!activeClinic?.id,
@@ -102,43 +121,35 @@ function ClinicDetailScreen() {
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: 'Excluir', style: 'destructive', onPress: () => deleteMutation.mutate() },
-      ]
+      ],
     );
   };
 
   const handleConnect = () => {
-    Alert.alert(
-      'Conectar WhatsApp',
-      'Como você deseja conectar?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'QR Code',
-          onPress: () => {
-            connectMutation.mutate();
-            setShowQRCode(true);
-          },
+    Alert.alert('Conectar WhatsApp', 'Como você deseja conectar?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'QR Code',
+        onPress: () => {
+          connectMutation.mutate();
+          setShowQRCode(true);
         },
-        {
-          text: 'Código de Pareamento',
-          onPress: () => {
-            connectMutation.mutate();
-            setShowPairingCode(true);
-          },
+      },
+      {
+        text: 'Código de Pareamento',
+        onPress: () => {
+          connectMutation.mutate();
+          setShowPairingCode(true);
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const handleDisconnect = () => {
-    Alert.alert(
-      'Desconectar WhatsApp',
-      'Tem certeza que deseja desconectar?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Desconectar', style: 'destructive', onPress: () => disconnectMutation.mutate() },
-      ]
-    );
+    Alert.alert('Desconectar WhatsApp', 'Tem certeza que deseja desconectar?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Desconectar', style: 'destructive', onPress: () => disconnectMutation.mutate() },
+    ]);
   };
 
   if (clinicLoading) {
@@ -158,7 +169,7 @@ function ClinicDetailScreen() {
     );
   }
 
-  const waStatusValue = waStatus?.status || clinic.whatsappStatus as ConnectionStatus;
+  const waStatusValue = waStatus?.status || (clinic.whatsappStatus as ConnectionStatus);
   const isConnected = waStatusValue === 'connected';
   const isPending = waStatusValue === 'qr_pending' || waStatusValue === 'code_pending';
 
@@ -167,8 +178,17 @@ function ClinicDetailScreen() {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} accessibilityLabel="Voltar" />
         <Appbar.Content title={clinic.name} />
-        <Appbar.Action icon="pencil" onPress={() => navigation.navigate('ClinicForm')} accessibilityLabel="Editar clínica" />
-        <Appbar.Action icon="delete" onPress={handleDelete} accessibilityLabel="Excluir clínica" disabled={deleteMutation.isPending} />
+        <Appbar.Action
+          icon="pencil"
+          onPress={() => navigation.navigate('ClinicForm')}
+          accessibilityLabel="Editar clínica"
+        />
+        <Appbar.Action
+          icon="delete"
+          onPress={handleDelete}
+          accessibilityLabel="Excluir clínica"
+          disabled={deleteMutation.isPending}
+        />
       </Appbar.Header>
 
       <ScrollView style={styles.content}>
@@ -184,7 +204,12 @@ function ClinicDetailScreen() {
             </Paragraph>
             <Paragraph style={styles.infoRow}>
               <Text style={styles.label}>WhatsApp:</Text>
-              <View style={[styles.statusBadge, { backgroundColor: WHATSAPP_STATUS_COLORS[waStatusValue] }]}>
+              <View
+                style={[
+                  styles.statusBadge,
+                  { backgroundColor: WHATSAPP_STATUS_COLORS[waStatusValue] },
+                ]}
+              >
                 <Text style={styles.statusText}>{WHATSAPP_STATUS_LABELS[waStatusValue]}</Text>
               </View>
             </Paragraph>

@@ -1,27 +1,19 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Text, Card, Title, Divider, Appbar, ActivityIndicator, useTheme } from 'react-native-paper';
+import { Text, Card, Title, Appbar, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useQuery } from '@tanstack/react-query';
-import { fetchDashboardStats, fetchLeadFunnel, fetchDispatchDashboardSessions } from '@features/dashboard/api/dashboard.api';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '@navigation/types';
+import {
+  fetchDashboardStats,
+  fetchLeadFunnel,
+  fetchDispatchDashboardSessions,
+} from '@features/dashboard/api/dashboard.api';
 import { BarChart } from 'react-native-gifted-charts';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const STATUS_COLORS = {
   OUTREACH: '#2196F3',
   TESTIMONIAL: '#FF9800',
   CLOSURE: '#9C27B0',
   FINALIZED: '#4CAF50',
-};
-
-const STATUS_LABELS = {
-  OUTREACH: 'Prospecção',
-  TESTIMONIAL: 'Depoimento',
-  CLOSURE: 'Encerramento',
-  FINALIZED: 'Finalizado',
 };
 
 const SESSION_STATUS_COLORS = {
@@ -34,9 +26,13 @@ const SESSION_STATUS_COLORS = {
 
 export function DashboardScreen() {
   const theme = useTheme();
-  const navigation = useNavigation<NavigationProp>();
 
-  const { data: stats, isLoading: statsLoading, refetch: statsRefetch, isRefetching: statsRefetching } = useQuery({
+  const {
+    data: stats,
+    isLoading: statsLoading,
+    refetch: statsRefetch,
+    isRefetching: statsRefetching,
+  } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: fetchDashboardStats,
   });
@@ -56,7 +52,11 @@ export function DashboardScreen() {
   const funnelData = funnel
     ? [
         { value: funnel.OUTREACH || 0, label: 'Prospecção', frontColor: STATUS_COLORS.OUTREACH },
-        { value: funnel.TESTIMONIAL || 0, label: 'Depoimento', frontColor: STATUS_COLORS.TESTIMONIAL },
+        {
+          value: funnel.TESTIMONIAL || 0,
+          label: 'Depoimento',
+          frontColor: STATUS_COLORS.TESTIMONIAL,
+        },
         { value: funnel.CLOSURE || 0, label: 'Encerramento', frontColor: STATUS_COLORS.CLOSURE },
         { value: funnel.FINALIZED || 0, label: 'Finalizado', frontColor: STATUS_COLORS.FINALIZED },
       ]
@@ -171,7 +171,9 @@ export function DashboardScreen() {
               </View>
               <View style={styles.whatsappStat}>
                 <View style={[styles.statusDot, { backgroundColor: '#b00020' }]} />
-                <Text style={styles.whatsappStatText}>Desconectados: {stats?.disconnectedClinics || 0}</Text>
+                <Text style={styles.whatsappStatText}>
+                  Desconectados: {stats?.disconnectedClinics || 0}
+                </Text>
               </View>
             </View>
           </Card.Content>
@@ -193,7 +195,14 @@ const styles = StyleSheet.create({
   card: { marginBottom: 16 },
   chartContainer: { alignItems: 'center', paddingVertical: 16 },
   emptyText: { textAlign: 'center', color: '#666', paddingVertical: 16 },
-  sessionItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#eee' },
+  sessionItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
   sessionInfo: { flex: 1 },
   sessionClinic: { fontSize: 14, fontWeight: 'bold' },
   sessionTime: { fontSize: 12, color: '#666' },

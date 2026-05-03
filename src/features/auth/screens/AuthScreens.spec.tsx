@@ -28,13 +28,15 @@ describe('forgotPassword validation', () => {
 });
 
 describe('resetPassword validation', () => {
-  const resetSchema = z.object({
-    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
-    confirmPassword: z.string().min(6, 'Confirme a senha'),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: 'As senhas não coincidem',
-    path: ['confirmPassword'],
-  });
+  const resetSchema = z
+    .object({
+      password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+      confirmPassword: z.string().min(6, 'Confirme a senha'),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'As senhas não coincidem',
+      path: ['confirmPassword'],
+    });
 
   it('should accept matching passwords', () => {
     const result = resetSchema.safeParse({
@@ -68,13 +70,15 @@ describe('resetPassword validation', () => {
 });
 
 describe('activateAccount validation', () => {
-  const activateSchema = z.object({
-    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
-    confirmPassword: z.string().min(6, 'Confirme a senha'),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: 'As senhas não coincidem',
-    path: ['confirmPassword'],
-  });
+  const activateSchema = z
+    .object({
+      password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+      confirmPassword: z.string().min(6, 'Confirme a senha'),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'As senhas não coincidem',
+      path: ['confirmPassword'],
+    });
 
   it('should accept valid password with confirmation', () => {
     const result = activateSchema.safeParse({

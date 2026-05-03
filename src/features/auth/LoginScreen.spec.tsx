@@ -19,11 +19,11 @@ describe('LoginScreen validation schema', () => {
     const validEmails = ['test@example.com', 'user@domain.org'];
     const invalidEmails = ['not-an-email', '@nodomain.com', 'no-at-sign'];
 
-    validEmails.forEach(email => {
+    validEmails.forEach((email) => {
       expect(email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     });
 
-    invalidEmails.forEach(email => {
+    invalidEmails.forEach((email) => {
       expect(email).not.toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     });
   });
@@ -35,7 +35,7 @@ describe('LoginScreen validation schema', () => {
 
   it('should reject short passwords', () => {
     const shortPasswords = ['12345', 'abc', 'pass'];
-    shortPasswords.forEach(pwd => {
+    shortPasswords.forEach((pwd) => {
       expect(pwd.length).toBeLessThan(6);
     });
   });
@@ -65,7 +65,10 @@ describe('LoginScreen API interaction', () => {
     };
     (api.post as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-    const result = await api.post('/auth/login', { email: 'test@example.com', password: 'password123' });
+    const result = await api.post('/auth/login', {
+      email: 'test@example.com',
+      password: 'password123',
+    });
     expect(result.data.user).toBeDefined();
     expect(result.data.token).toBeDefined();
   });

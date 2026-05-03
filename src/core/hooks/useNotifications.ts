@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
 import {
   requestNotificationPermissions,
   getExpoPushToken,

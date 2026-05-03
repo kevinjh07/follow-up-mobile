@@ -1,30 +1,56 @@
 describe('Lead search and filter logic', () => {
   const mockLeads = [
-    { id: '1', name: 'João Silva', email: 'joao@email.com', phone: '11999990001', status: 'OUTREACH' as const },
-    { id: '2', name: 'Maria Santos', email: 'maria@email.com', phone: '11999990002', status: 'TESTIMONIAL' as const },
-    { id: '3', name: 'Pedro Oliveira', email: 'pedro@email.com', phone: '11999990003', status: 'CLOSURE' as const },
-    { id: '4', name: 'Ana Costa', email: 'ana@email.com', phone: '11999990004', status: 'FINALIZED' as const },
+    {
+      id: '1',
+      name: 'João Silva',
+      email: 'joao@email.com',
+      phone: '11999990001',
+      status: 'OUTREACH' as const,
+    },
+    {
+      id: '2',
+      name: 'Maria Santos',
+      email: 'maria@email.com',
+      phone: '11999990002',
+      status: 'TESTIMONIAL' as const,
+    },
+    {
+      id: '3',
+      name: 'Pedro Oliveira',
+      email: 'pedro@email.com',
+      phone: '11999990003',
+      status: 'CLOSURE' as const,
+    },
+    {
+      id: '4',
+      name: 'Ana Costa',
+      email: 'ana@email.com',
+      phone: '11999990004',
+      status: 'FINALIZED' as const,
+    },
   ];
 
   describe('search filter', () => {
     it('should return all leads when search query is empty', () => {
       const searchQuery = '';
-      const filtered = mockLeads.filter((lead) =>
-        !searchQuery.trim() ||
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery)
+      const filtered = mockLeads.filter(
+        (lead) =>
+          !searchQuery.trim() ||
+          lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.phone.includes(searchQuery),
       );
       expect(filtered.length).toBe(4);
     });
 
     it('should filter leads by name', () => {
       const searchQuery = 'João';
-      const filtered = mockLeads.filter((lead) =>
-        !searchQuery.trim() ||
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery)
+      const filtered = mockLeads.filter(
+        (lead) =>
+          !searchQuery.trim() ||
+          lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.phone.includes(searchQuery),
       );
       expect(filtered.length).toBe(1);
       expect(filtered[0].name).toBe('João Silva');
@@ -32,11 +58,12 @@ describe('Lead search and filter logic', () => {
 
     it('should filter leads by email', () => {
       const searchQuery = 'maria@email.com';
-      const filtered = mockLeads.filter((lead) =>
-        !searchQuery.trim() ||
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery)
+      const filtered = mockLeads.filter(
+        (lead) =>
+          !searchQuery.trim() ||
+          lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.phone.includes(searchQuery),
       );
       expect(filtered.length).toBe(1);
       expect(filtered[0].name).toBe('Maria Santos');
@@ -44,11 +71,12 @@ describe('Lead search and filter logic', () => {
 
     it('should filter leads by phone', () => {
       const searchQuery = '11999990003';
-      const filtered = mockLeads.filter((lead) =>
-        !searchQuery.trim() ||
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery)
+      const filtered = mockLeads.filter(
+        (lead) =>
+          !searchQuery.trim() ||
+          lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lead.phone.includes(searchQuery),
       );
       expect(filtered.length).toBe(1);
       expect(filtered[0].name).toBe('Pedro Oliveira');
@@ -58,16 +86,16 @@ describe('Lead search and filter logic', () => {
   describe('status filter', () => {
     it('should return all leads when no status is selected', () => {
       const selectedStatuses: string[] = [];
-      const filtered = mockLeads.filter((lead) =>
-        selectedStatuses.length === 0 || selectedStatuses.includes(lead.status)
+      const filtered = mockLeads.filter(
+        (lead) => selectedStatuses.length === 0 || selectedStatuses.includes(lead.status),
       );
       expect(filtered.length).toBe(4);
     });
 
     it('should filter leads by single selected status', () => {
       const selectedStatuses = ['OUTREACH'];
-      const filtered = mockLeads.filter((lead) =>
-        selectedStatuses.length === 0 || selectedStatuses.includes(lead.status)
+      const filtered = mockLeads.filter(
+        (lead) => selectedStatuses.length === 0 || selectedStatuses.includes(lead.status),
       );
       expect(filtered.length).toBe(1);
       expect(filtered[0].status).toBe('OUTREACH');
@@ -75,8 +103,8 @@ describe('Lead search and filter logic', () => {
 
     it('should filter leads by multiple selected statuses', () => {
       const selectedStatuses = ['OUTREACH', 'TESTIMONIAL'];
-      const filtered = mockLeads.filter((lead) =>
-        selectedStatuses.length === 0 || selectedStatuses.includes(lead.status)
+      const filtered = mockLeads.filter(
+        (lead) => selectedStatuses.length === 0 || selectedStatuses.includes(lead.status),
       );
       expect(filtered.length).toBe(2);
     });

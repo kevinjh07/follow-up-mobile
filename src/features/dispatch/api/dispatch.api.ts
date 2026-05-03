@@ -37,7 +37,11 @@ export interface DispatchSendingEvent {
   phone: string;
 }
 
-export type DispatchStreamEvent = DispatchProgressEvent | DispatchDoneEvent | DispatchErrorEvent | DispatchSendingEvent;
+export type DispatchStreamEvent =
+  | DispatchProgressEvent
+  | DispatchDoneEvent
+  | DispatchErrorEvent
+  | DispatchSendingEvent;
 
 export interface DispatchSession {
   id: string;
@@ -70,7 +74,7 @@ export async function startDispatch(clinicId: string, leadIds: string[]): Promis
 export async function startQuickDispatch(
   clinicId: string,
   leads: { phone: string; name: string }[],
-  consent: boolean
+  consent: boolean,
 ): Promise<DispatchSession> {
   const response = await api.post(`/dispatch/${clinicId}/quick-stream`, { leads, consent });
   return response.data;

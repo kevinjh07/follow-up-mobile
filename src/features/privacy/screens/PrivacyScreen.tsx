@@ -16,7 +16,10 @@ export function PrivacyScreen() {
   const exportMutation = useMutation({
     mutationFn: () => exportPrivacyData(undefined, phone || undefined),
     onSuccess: () => {
-      Alert.alert('Sucesso', 'Solicitação de exportação enviada. Você receberá um e-mail com os dados.');
+      Alert.alert(
+        'Sucesso',
+        'Solicitação de exportação enviada. Você receberá um e-mail com os dados.',
+      );
     },
     onError: () => {
       Alert.alert('Erro', 'Não foi possível processar a solicitação.');
@@ -106,10 +109,14 @@ export function PrivacyScreen() {
             <Text style={styles.description}>
               De acordo com a Lei Geral de Proteção de Dados (Lei 13.709/2018), você tem direito a:
             </Text>
-            <Text style={styles.rightItem}>• Confirmar a existência de tratamento de seus dados</Text>
+            <Text style={styles.rightItem}>
+              • Confirmar a existência de tratamento de seus dados
+            </Text>
             <Text style={styles.rightItem}>• Acessar seus dados pessoais</Text>
             <Text style={styles.rightItem}>• Corrigir dados incompletos ou desatualizados</Text>
-            <Text style={styles.rightItem}>• Anonimizar, bloquear ou eliminar dados desnecessários</Text>
+            <Text style={styles.rightItem}>
+              • Anonimizar, bloquear ou eliminar dados desnecessários
+            </Text>
             <Text style={styles.rightItem}>• Solicitar a portabilidade dos dados</Text>
             <Text style={styles.rightItem}>• Eliminar dados tratados com consentimento</Text>
           </Card.Content>

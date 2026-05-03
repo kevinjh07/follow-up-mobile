@@ -1,6 +1,5 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import { Platform } from 'react-native';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -40,13 +39,13 @@ export async function getExpoPushToken(): Promise<string | null> {
 }
 
 export function addNotificationReceivedListener(
-  handler: (notification: Notifications.Notification) => void
+  handler: (notification: Notifications.Notification) => void,
 ) {
   return Notifications.addNotificationReceivedListener(handler);
 }
 
 export function addNotificationResponseReceivedListener(
-  handler: (response: Notifications.NotificationResponse) => void
+  handler: (response: Notifications.NotificationResponse) => void,
 ) {
   return Notifications.addNotificationResponseReceivedListener(handler);
 }

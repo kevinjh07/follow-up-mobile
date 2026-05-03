@@ -130,7 +130,9 @@ export function LeadsListView({
                 selectedStatuses.includes(item) && { backgroundColor: STATUS_COLORS[item] },
               ]}
               textStyle={
-                selectedStatuses.includes(item) ? styles.chipTextSelected : { color: STATUS_COLORS[item] }
+                selectedStatuses.includes(item)
+                  ? styles.chipTextSelected
+                  : { color: STATUS_COLORS[item] }
               }
             >
               {STATUS_LABELS[item]}
@@ -148,7 +150,9 @@ export function LeadsListView({
         ListEmptyComponent={
           <View style={styles.center}>
             <Text>
-              {searchQuery || selectedStatuses.length > 0 ? 'Nenhum lead encontrado' : 'Nenhum lead cadastrado'}
+              {searchQuery || selectedStatuses.length > 0
+                ? 'Nenhum lead encontrado'
+                : 'Nenhum lead cadastrado'}
             </Text>
           </View>
         }

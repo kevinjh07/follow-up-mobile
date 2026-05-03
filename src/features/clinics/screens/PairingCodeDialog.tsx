@@ -19,7 +19,11 @@ export function PairingCodeDialog({ visible, onDismiss }: PairingCodeDialogProps
   const route = useRoute<PairingCodeRouteProp>();
   const { clinicId } = route.params;
 
-  const { data: status, isLoading, error } = useQuery({
+  const {
+    data: status,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['whatsapp-status', clinicId],
     queryFn: () => fetchWhatsAppStatus(clinicId),
     enabled: visible,
@@ -48,7 +52,8 @@ export function PairingCodeDialog({ visible, onDismiss }: PairingCodeDialogProps
               <Text style={styles.instruction}>Digite este código no WhatsApp</Text>
               <Text style={styles.code}>{status.pairingCode}</Text>
               <Text style={styles.hint}>
-                WhatsApp {CHAR_ARROW} Settings {CHAR_ARROW} Linked Devices {CHAR_ARROW} Link a Device
+                WhatsApp {CHAR_ARROW} Settings {CHAR_ARROW} Linked Devices {CHAR_ARROW} Link a
+                Device
               </Text>
             </View>
           )}

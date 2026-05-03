@@ -42,7 +42,7 @@ export function DispatchConfirmScreen() {
       Alert.alert(
         'WhatsApp Desconectado',
         `A clínica "${activeClinic?.name}" está com o WhatsApp desconectado. Conecte antes de fazer o disparo.`,
-        [{ text: 'OK' }]
+        [{ text: 'OK' }],
       );
       return;
     }
@@ -84,19 +84,13 @@ export function DispatchConfirmScreen() {
             <Text style={styles.warningText}>
               • Cada lead receberá mensagens conforme seu status atual
             </Text>
-            <Text style={styles.warningText}>
-              • Você pode acompanhar o progresso em tempo real
-            </Text>
+            <Text style={styles.warningText}>• Você pode acompanhar o progresso em tempo real</Text>
           </Card.Content>
         </Card>
       </ScrollView>
 
       <View style={styles.footer}>
-        <Button
-          mode="outlined"
-          onPress={() => navigation.goBack()}
-          style={styles.button}
-        >
+        <Button mode="outlined" onPress={() => navigation.goBack()} style={styles.button}>
           Cancelar
         </Button>
         <Button

@@ -57,7 +57,7 @@ describe('LeadDetailScreen business logic', () => {
 
     it('should have valid status values', () => {
       const validStatuses = ['OUTREACH', 'TESTIMONIAL', 'CLOSURE', 'FINALIZED'];
-      validStatuses.forEach(status => {
+      validStatuses.forEach((status) => {
         expect(['OUTREACH', 'TESTIMONIAL', 'CLOSURE', 'FINALIZED']).toContain(status);
       });
     });
@@ -74,10 +74,7 @@ describe('LeadDetailScreen business logic', () => {
 
   describe('Query invalidation after mutations', () => {
     it('should invalidate leads and specific lead queries on status update', () => {
-      const queryKeysToInvalidate = [
-        ['leads'],
-        ['lead', 'lead-1'],
-      ];
+      const queryKeysToInvalidate = [['leads'], ['lead', 'lead-1']];
 
       expect(queryKeysToInvalidate).toContainEqual(['leads']);
       expect(queryKeysToInvalidate).toContainEqual(['lead', 'lead-1']);

@@ -1,8 +1,19 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { Text, Button, Appbar, Card, Title, ProgressBar, ActivityIndicator } from 'react-native-paper';
+import {
+  Text,
+  Button,
+  Appbar,
+  Card,
+  Title,
+  ProgressBar,
+  ActivityIndicator,
+} from 'react-native-paper';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { getDispatchSessionStatus, cancelDispatchSession } from '@features/dispatch/api/dispatch.api';
+import {
+  getDispatchSessionStatus,
+  cancelDispatchSession,
+} from '@features/dispatch/api/dispatch.api';
 import { useDispatchStore } from '@features/dispatch/stores/dispatchStore';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -29,7 +40,7 @@ export function DispatchProgressScreen() {
     if (session.status === 'COMPLETED' || session.status === 'FAILED') return 1;
     if (session.total > 0) return (session.successful + session.failed) / session.total;
     return 0;
-  }, [session?.status, session?.successful, session?.failed, session?.total]);
+  }, [session]);
 
   useEffect(() => {
     if (session) {
@@ -49,36 +60,43 @@ export function DispatchProgressScreen() {
   });
 
   const handleCancel = () => {
-    Alert.alert(
-      'Cancelar Disparo',
-      'Tem certeza que deseja cancelar o disparo em andamento?',
-      [
-        { text: 'Não', style: 'cancel' },
-        { text: 'Sim', style: 'destructive', onPress: () => cancelMutation.mutate() },
-      ]
-    );
+    Alert.alert('Cancelar Disparo', 'Tem certeza que deseja cancelar o disparo em andamento?', [
+      { text: 'Não', style: 'cancel' },
+      { text: 'Sim', style: 'destructive', onPress: () => cancelMutation.mutate() },
+    ]);
   };
 
   const getStatusLabel = () => {
     if (!session) return 'Carregando...';
     switch (session.status) {
-      case 'QUEUED': return 'Aguardando...';
-      case 'RUNNING': return 'Em andamento';
-      case 'COMPLETED': return 'Concluído';
-      case 'CANCELLED': return 'Cancelado';
-      case 'FAILED': return 'Falhou';
-      default: return session.status;
+      case 'QUEUED':
+        return 'Aguardando...';
+      case 'RUNNING':
+        return 'Em andamento';
+      case 'COMPLETED':
+        return 'Concluído';
+      case 'CANCELLED':
+        return 'Cancelado';
+      case 'FAILED':
+        return 'Falhou';
+      default:
+        return session.status;
     }
   };
 
   const getStatusColor = () => {
     if (!session) return '#999';
     switch (session.status) {
-      case 'COMPLETED': return '#4caf50';
-      case 'CANCELLED': return '#999';
-      case 'FAILED': return '#b00020';
-      case 'RUNNING': return '#2196f3';
-      default: return '#999';
+      case 'COMPLETED':
+        return '#4caf50';
+      case 'CANCELLED':
+        return '#999';
+      case 'FAILED':
+        return '#b00020';
+      case 'RUNNING':
+        return '#2196f3';
+      default:
+        return '#999';
     }
   };
 
@@ -111,11 +129,15 @@ export function DispatchProgressScreen() {
             <ProgressBar progress={progress} color={getStatusColor()} style={styles.progressBar} />
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#4caf50' }]}>{currentSession?.successful || 0}</Text>
+                <Text style={[styles.statValue, { color: '#4caf50' }]}>
+                  {currentSession?.successful || 0}
+                </Text>
                 <Text style={styles.statLabel}>Enviados</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#b00020' }]}>{currentSession?.failed || 0}</Text>
+                <Text style={[styles.statValue, { color: '#b00020' }]}>
+                  {currentSession?.failed || 0}
+                </Text>
                 <Text style={styles.statLabel}>Falhas</Text>
               </View>
             </View>
@@ -134,7 +156,11 @@ export function DispatchProgressScreen() {
                     return <Text style={styles.eventText}>✓ Enviado para {item.result.phone}</Text>;
                   }
                   if (item.type === 'error') {
-                    return <Text style={[styles.eventText, { color: '#b00020' }]}>✗ Erro: {item.error}</Text>;
+                    return (
+                      <Text style={[styles.eventText, { color: '#b00020' }]}>
+                        ✗ Erro: {item.error}
+                      </Text>
+                    );
                   }
                   if (item.type === 'sending') {
                     return <Text style={styles.eventText}>→ Enviando para {item.phone}...</Text>;

@@ -42,7 +42,8 @@ export function ClinicsListView({
                 styles.badge,
                 {
                   backgroundColor:
-                    WHATSAPP_STATUS_COLORS[item.whatsappStatus] || WHATSAPP_STATUS_COLORS.disconnected,
+                    WHATSAPP_STATUS_COLORS[item.whatsappStatus] ||
+                    WHATSAPP_STATUS_COLORS.disconnected,
                 },
               ]}
             >
@@ -77,7 +78,12 @@ export function ClinicsListView({
           </View>
         }
       />
-      <FAB icon="plus" style={styles.fab} onPress={onAddClinic} accessibilityLabel="Adicionar clínica" />
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={onAddClinic}
+        accessibilityLabel="Adicionar clínica"
+      />
     </View>
   );
 }

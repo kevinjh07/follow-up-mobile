@@ -2,8 +2,24 @@ import type { Lead } from '@features/leads/api/leads.api';
 
 describe('Dispatch flow logic', () => {
   const mockLeads: Lead[] = [
-    { id: '1', name: 'Lead 1', email: 'l1@test.com', phone: '111', status: 'OUTREACH' as const, clinicId: 'c1', createdAt: '' },
-    { id: '2', name: 'Lead 2', email: 'l2@test.com', phone: '222', status: 'TESTIMONIAL' as const, clinicId: 'c1', createdAt: '' },
+    {
+      id: '1',
+      name: 'Lead 1',
+      email: 'l1@test.com',
+      phone: '111',
+      status: 'OUTREACH' as const,
+      clinicId: 'c1',
+      createdAt: '',
+    },
+    {
+      id: '2',
+      name: 'Lead 2',
+      email: 'l2@test.com',
+      phone: '222',
+      status: 'TESTIMONIAL' as const,
+      clinicId: 'c1',
+      createdAt: '',
+    },
   ];
 
   it('should calculate lead IDs for dispatch', () => {
