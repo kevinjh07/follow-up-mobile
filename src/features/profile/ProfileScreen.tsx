@@ -1,13 +1,28 @@
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, useTheme, List } from 'react-native-paper';
 import { useAuthStore } from '@core/stores/authStore';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '@navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export function ProfileScreen() {
   const theme = useTheme();
+  const navigation = useNavigation<NavigationProp>();
   const { user, logout } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
 
   function handleLogout() {
     logout();
+  }
+
+  function handleChangePassword() {
+    navigation.navigate('ChangePassword');
+  }
+
+  function handleManageUsers() {
+    navigation.navigate('Users');
   }
 
   return (
@@ -19,7 +34,18 @@ export function ProfileScreen() {
       </View>
 
       <List.Section>
-        <List.Item title="Configurações" left={(props) => <List.Icon {...props} icon="cog" />} />
+        <List.Item
+          title="Alterar Senha"
+          left={(props) => <List.Icon {...props} icon="lock" />}
+          onPress={handleChangePassword}
+        />
+        {isAdmin && (
+          <List.Item
+            title="Gerenciar Usuários"
+            left={(props) => <List.Icon {...props} icon="account-group" />}
+            onPress={handleManageUsers}
+          />
+        )}
         <List.Item title="Sobre" left={(props) => <List.Icon {...props} icon="information" />} />
       </List.Section>
 

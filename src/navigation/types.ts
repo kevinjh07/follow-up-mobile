@@ -4,6 +4,8 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   ResetPassword: { token?: string };
   ActivateAccount: { token?: string };
+  ChangePassword: undefined;
+  Users: undefined;
 };
 
 export type AuthStackParamList = {
