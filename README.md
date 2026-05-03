@@ -56,7 +56,7 @@ O app permite que atendentes e administradores gerenciem leads cadastrados por c
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/kevinjh07/follow-up-mobile.git
+git clone https://github.com/SEU_USUARIO/follow-up-mobile.git
 cd follow-up-mobile
 
 # 2. Instale as dependências

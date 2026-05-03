@@ -31,7 +31,7 @@ Obrigado por querer contribuir com o Follow-Up Mobile! Este documento contém as
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/kevinjh07/follow-up-mobile.git
+git clone https://github.com/SEU_USUARIO/follow-up-mobile.git
 cd follow-up-mobile
 
 # 2. Instale as dependências
@@ -52,7 +52,7 @@ EXPO_PUBLIC_ENV=development
 
 ### Configuração da API
 
-O app consome a API do projeto [follow-up-mac](https://github.com/kevinjh07/follow-up-mac). Siga os passos:
+O app consome a API do projeto [follow-up-mac](https://github.com/SEU_USUARIO/follow-up-mac). Siga os passos:
 
 1. Clone e configure o `follow-up-mac` (veja o README dele)
 2. Suba a infraestrutura: `cd follow-up-mac && npm run infra:up`
@@ -378,6 +378,6 @@ git commit -m "docs: adiciona instruções de setup no CONTRIBUTING"
 
 ## Dúvidas?
 
-Abra uma [issue](https://github.com/kevinjh07/follow-up-mobile/issues) no repositório ou entre em contato.
+Abra uma [issue](https://github.com/SEU_USUARIO/follow-up-mobile/issues) no repositório ou entre em contato.
 
 Obrigado por contribuir! 🚀
