@@ -8,6 +8,11 @@ import { z } from 'zod';
 import { useAuthStore } from '@core/stores/authStore';
 import { useMutation } from '@tanstack/react-query';
 import { api } from '@core/services/api';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '@navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
 const loginSchema = z.object({
   email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
@@ -18,6 +23,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginScreen() {
   const theme = useTheme();
+  const navigation = useNavigation<NavigationProp>();
   const setUser = useAuthStore((s) => s.setUser);
   const setToken = useAuthStore((s) => s.setToken);
 
@@ -106,6 +112,14 @@ export function LoginScreen() {
           >
             Entrar
           </Button>
+
+          <Button
+            mode="text"
+            onPress={() => navigation.navigate('ForgotPassword')}
+            style={styles.forgotButton}
+          >
+            Esqueci minha senha
+          </Button>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -137,6 +151,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     paddingVertical: 4,
+  },
+  forgotButton: {
+    marginTop: 16,
   },
   error: {
     fontSize: 12,

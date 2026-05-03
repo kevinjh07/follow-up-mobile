@@ -1,13 +1,16 @@
 export type RootStackParamList = {
-  Login: undefined;
   Main: undefined;
-  Clinics: undefined;
-  Leads: undefined;
-  Profile: undefined;
+  Login: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: { token?: string };
+  ActivateAccount: { token?: string };
 };
 
 export type AuthStackParamList = {
   Login: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: { token?: string };
+  ActivateAccount: { token?: string };
 };
 
 export type MainTabsParamList = {
