@@ -1,5 +1,5 @@
 import { api } from '@core/services/api';
-import type { User, NewUser, UserRole, UserStatus } from '../types';
+import type { User, NewUser } from '../types';
 
 export type { User, NewUser, UserRole, UserStatus } from '../types';
 

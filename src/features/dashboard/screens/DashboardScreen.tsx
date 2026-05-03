@@ -121,8 +121,8 @@ export function DashboardScreen() {
                   spacing={20}
                   roundedTop
                   hideRules
-                  xAxisLabelTextStyle={{ fontSize: 10, color: '#666' }}
-                  yAxisTextStyle={{ fontSize: 10, color: '#666' }}
+                  xAxisLabelTextStyle={styles.chartAxisText}
+                  yAxisTextStyle={styles.chartAxisText}
                 />
               </View>
             ) : (
@@ -166,11 +166,11 @@ export function DashboardScreen() {
           <Card.Content>
             <View style={styles.whatsappSummary}>
               <View style={styles.whatsappStat}>
-                <View style={[styles.statusDot, { backgroundColor: '#4caf50' }]} />
+                <View style={styles.statusDotGreen} />
                 <Text style={styles.whatsappStatText}>Conectados: -</Text>
               </View>
               <View style={styles.whatsappStat}>
-                <View style={[styles.statusDot, { backgroundColor: '#b00020' }]} />
+                <View style={styles.statusDotRed} />
                 <Text style={styles.whatsappStatText}>
                   Desconectados: {stats?.disconnectedClinics || 0}
                 </Text>
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
   statLabel: { fontSize: 12, color: '#666', textAlign: 'center', marginTop: 4 },
   card: { marginBottom: 16 },
   chartContainer: { alignItems: 'center', paddingVertical: 16 },
+  chartAxisText: { fontSize: 10, color: '#666' },
   emptyText: { textAlign: 'center', color: '#666', paddingVertical: 16 },
   sessionItem: {
     flexDirection: 'row',
@@ -210,6 +211,7 @@ const styles = StyleSheet.create({
   sessionStatusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
   whatsappSummary: { gap: 8 },
   whatsappStat: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  statusDot: { width: 12, height: 12, borderRadius: 6 },
+  statusDotGreen: { width: 12, height: 12, borderRadius: 6, backgroundColor: '#4caf50' },
+  statusDotRed: { width: 12, height: 12, borderRadius: 6, backgroundColor: '#b00020' },
   whatsappStatText: { fontSize: 14 },
 });

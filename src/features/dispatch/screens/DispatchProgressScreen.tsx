@@ -129,15 +129,11 @@ export function DispatchProgressScreen() {
             <ProgressBar progress={progress} color={getStatusColor()} style={styles.progressBar} />
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#4caf50' }]}>
-                  {currentSession?.successful || 0}
-                </Text>
+                <Text style={styles.statValueSuccess}>{currentSession?.successful || 0}</Text>
                 <Text style={styles.statLabel}>Enviados</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: '#b00020' }]}>
-                  {currentSession?.failed || 0}
-                </Text>
+                <Text style={styles.statValueError}>{currentSession?.failed || 0}</Text>
                 <Text style={styles.statLabel}>Falhas</Text>
               </View>
             </View>
@@ -156,11 +152,7 @@ export function DispatchProgressScreen() {
                     return <Text style={styles.eventText}>✓ Enviado para {item.result.phone}</Text>;
                   }
                   if (item.type === 'error') {
-                    return (
-                      <Text style={[styles.eventText, { color: '#b00020' }]}>
-                        ✗ Erro: {item.error}
-                      </Text>
-                    );
+                    return <Text style={styles.eventTextError}>✗ Erro: {item.error}</Text>;
                   }
                   if (item.type === 'sending') {
                     return <Text style={styles.eventText}>→ Enviando para {item.phone}...</Text>;
@@ -202,9 +194,11 @@ const styles = StyleSheet.create({
   progressBar: { height: 8, borderRadius: 4 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 },
   statItem: { alignItems: 'center' },
-  statValue: { fontSize: 24, fontWeight: 'bold' },
+  statValueSuccess: { fontSize: 24, fontWeight: 'bold', color: '#4caf50' },
+  statValueError: { fontSize: 24, fontWeight: 'bold', color: '#b00020' },
   statLabel: { fontSize: 12, color: '#666' },
   eventText: { fontSize: 12, marginBottom: 4 },
+  eventTextError: { fontSize: 12, marginBottom: 4, color: '#b00020' },
   actions: { marginTop: 16 },
   cancelButton: { borderColor: '#b00020' },
 });
