@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "moduleName": "@expo/vector-icons",
+        "exportNames": ["MaterialCommunityIcons"],
+        "conventionNames": ["PascalCase"]
+      }
+    ]
+  }
+}
