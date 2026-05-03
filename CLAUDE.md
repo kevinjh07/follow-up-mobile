@@ -437,6 +437,19 @@ npm test -- --watchAll=false
 npm run lint && npm run typecheck
 ```
 
+Os docs detalhados podem ser criados na pasta `docs/` conforme necessidade:
+
+| Documento                 | Conteúdo                                |
+| ------------------------- | --------------------------------------- |
+| `docs/ARCHITECTURE.md`    | Decisões arquiteturais, stack detalhada |
+| `docs/SETUP.md`           | Setup completo para novos devs          |
+| `docs/API_INTEGRATION.md` | Contratos API, endpoints, payloads      |
+| `docs/AUTH.md`            | Fluxo de login, sessão, refresh, RBAC   |
+| `docs/FEATURES.md`        | Como criar uma nova feature             |
+| `docs/CONVENTIONS.md`     | Guia de estilo completo                 |
+| `docs/DEPLOY.md`          | EAS Build, OTA updates, stores          |
+| `docs/TROUBLESHOOTING.md` | Problemas comuns e soluções             |
+
 ---
 
 ## Convenções Especiais
